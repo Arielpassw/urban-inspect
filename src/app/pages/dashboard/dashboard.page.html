@@ -1,0 +1,170 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>UrbanInspect | Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dashboard-content">
+  <div class="dashboard-container">
+
+    <!-- Encabezado -->
+    <div class="welcome-section">
+      <div>
+        <p class="eyebrow">PANEL DE CONTROL</p>
+        <h1>Resumen general</h1>
+        <p class="subtitle">
+          Supervisa las incidencias de infraestructura urbana de Quito.
+        </p>
+      </div>
+
+      <button class="refresh-button" (click)="cargarIncidencias()">
+        ↻ Actualizar
+      </button>
+    </div>
+
+    <!-- Mensajes -->
+    <div class="message loading-message" *ngIf="cargando">
+      Cargando incidencias...
+    </div>
+
+    <div class="message error-message" *ngIf="error">
+      {{ error }}
+      <button (click)="cargarIncidencias()">Reintentar</button>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="stats-grid" *ngIf="!cargando && !error">
+      <article class="stat-card total-card">
+        <div class="stat-icon">📋</div>
+        <p>Total consultado</p>
+        <h2>{{ totalIncidencias }}</h2>
+        <span>Registros de esta página</span>
+      </article>
+
+      <article class="stat-card pending-card">
+        <div class="stat-icon">⏳</div>
+        <p>Pendientes</p>
+        <h2>{{ pendientes }}</h2>
+        <span>Esperando atención</span>
+      </article>
+
+      <article class="stat-card progress-card">
+        <div class="stat-icon">🔧</div>
+        <p>En progreso</p>
+        <h2>{{ enProgreso }}</h2>
+        <span>En proceso de atención</span>
+      </article>
+
+      <article class="stat-card resolved-card">
+        <div class="stat-icon">✓</div>
+        <p>Resueltas</p>
+        <h2>{{ resueltas }}</h2>
+        <span>Atendidas</span>
+      </article>
+    </div>
+
+    <!-- Accesos rápidos -->
+    <section class="quick-actions">
+      <h2>Accesos rápidos</h2>
+
+      <div class="actions-grid">
+        <button class="action-card" routerLink="/incidencias">
+          <span class="action-icon">📑</span>
+          <span>
+            <strong>Ver incidencias</strong>
+            <small>Consultar reportes registrados</small>
+          </span>
+          <span class="arrow">›</span>
+        </button>
+
+        <button class="action-card" routerLink="/incidencia-form">
+          <span class="action-icon">＋</span>
+          <span>
+            <strong>Nueva incidencia</strong>
+            <small>Registrar un problema urbano</small>
+          </span>
+          <span class="arrow">›</span>
+        </button>
+
+        <button class="action-card" routerLink="/seguimiento">
+          <span class="action-icon">📍</span>
+          <span>
+            <strong>Seguimiento</strong>
+            <small>Revisar incidencias marcadas</small>
+          </span>
+          <span class="arrow">›</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Incidencias recientes -->
+    <section class="recent-section">
+      <div class="section-heading">
+        <div>
+          <h2>Incidencias recientes</h2>
+          <p>Últimos registros recibidos de MockAPI</p>
+        </div>
+
+        <button routerLink="/incidencias" class="view-all-button">
+          Ver todas →
+        </button>
+      </div>
+
+      <div class="table-wrapper" *ngIf="!cargando && !error">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Tipo</th>
+              <th>Sector</th>
+              <th>Prioridad</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let incidencia of incidencias">
+              <td class="code-cell">
+                {{ incidencia.codigo }}
+              </td>
+              <td>{{ incidencia.tipo }}</td>
+              <td>{{ incidencia.sector }}</td>
+              <td>
+                <span
+                  class="priority-badge"
+                  [ngClass]="'priority-' + incidencia.prioridad"
+                >
+                  {{ incidencia.prioridad }}
+                </span>
+              </td>
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="{
+                    'status-pending': incidencia.estado === 'pendiente',
+                    'status-progress': incidencia.estado === 'en progreso',
+                    'status-resolved': incidencia.estado === 'resuelta'
+                  }"
+                >
+                  {{ incidencia.estado }}
+                </span>
+              </td>
+            </tr>
+
+            <tr *ngIf="incidencias.length === 0">
+              <td colspan="5" class="empty-state">
+                No hay incidencias para mostrar.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="dashboard-footer">
+      UrbanInspect · Monitoreo de infraestructura urbana de Quito
+    </footer>
+
+  </div>
+</ion-content>

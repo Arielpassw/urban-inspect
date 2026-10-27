@@ -1,0 +1,304 @@
+
+:host {
+  display: block;
+}
+
+.formulario-contenido {
+  --background: #f4f7fb;
+}
+
+.formulario-container {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding-bottom: 28px;
+}
+
+.encabezado-formulario {
+  padding: 18px 8px 20px;
+}
+
+.icono-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border-radius: 16px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 28px;
+}
+
+.encabezado-formulario h1 {
+  margin: 0 0 8px;
+  color: #172b4d;
+  font-size: 25px;
+  font-weight: 750;
+}
+
+.encabezado-formulario p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.formulario-card {
+  margin: 0 0 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgb(15 23 42 / 5%);
+}
+
+.formulario-card ion-card-header {
+  padding: 20px 18px 12px;
+}
+
+.formulario-card ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #172b4d;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.formulario-card ion-card-title ion-icon {
+  color: #2563eb;
+  font-size: 22px;
+}
+
+.formulario-card ion-card-content {
+  padding: 8px 18px 20px;
+}
+
+.campo {
+  margin-bottom: 18px;
+}
+
+.campo:last-child {
+  margin-bottom: 0;
+}
+
+.etiqueta {
+  display: block;
+  margin: 0 0 8px 2px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.obligatorio {
+  color: #dc2626;
+}
+
+.campo-item {
+  --background: #f8fafc;
+  --border-color: #dbe3ee;
+  --border-radius: 10px;
+  --border-style: solid;
+  --border-width: 1px;
+  --padding-start: 12px;
+  --inner-padding-end: 10px;
+  --min-height: 48px;
+
+  border: 1px solid #dbe3ee;
+  border-radius: 10px;
+  overflow: visible;
+}
+
+.campo-item:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 10%);
+}
+
+.campo-item ion-input,
+.campo-item ion-textarea,
+.campo-item ion-select {
+  width: 100%;
+  color: #1e293b;
+  font-size: 14px;
+  --placeholder-color: #94a3b8;
+  --placeholder-opacity: 1;
+}
+
+.campo-item ion-select {
+  max-width: 100%;
+  min-height: 46px;
+}
+
+.textarea-item {
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  align-items: flex-start;
+}
+
+.textarea-item ion-textarea {
+  min-height: 100px;
+}
+
+.ayuda-campo {
+  margin: 8px 2px 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.texto-seccion {
+  margin: 0 0 16px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+ion-button {
+  --border-radius: 10px;
+  font-weight: 650;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+ion-button ion-icon {
+  font-size: 19px;
+}
+
+.foto-preview {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  background: #f8fbff;
+}
+
+.foto-preview ion-img {
+  display: block;
+  max-height: 320px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #e2e8f0;
+}
+
+.foto-preview ion-img::part(image) {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+}
+
+.nota-foto {
+  display: block;
+  margin: 10px 2px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.coordenadas-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.coordenadas-grid .campo {
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.clima-panel {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  background: #f0fdf4;
+}
+
+.clima-panel h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  color: #166534;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.clima-panel h3 ion-icon {
+  font-size: 22px;
+}
+
+.clima-panel p {
+  margin: 8px 0;
+  color: #334155;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.clima-panel ion-note {
+  display: block;
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.clima-panel.clima-advertencia {
+  border-color: #fcd34d;
+  background: #fffbeb;
+}
+
+.clima-panel.clima-advertencia h3 {
+  color: #92400e;
+}
+
+.clima-panel.clima-no-disponible {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.clima-panel.clima-no-disponible h3 {
+  color: #475569;
+}
+
+.acciones-formulario {
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.acciones-formulario ion-button {
+  margin: 0;
+}
+
+.pie-formulario {
+  margin: 16px 4px 0;
+  color: #94a3b8;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* Las listas de ion-select usan una ventana flotante.
+   No se les asigna posición fija dentro del formulario. */
+ion-select {
+  --highlight-color-focused: #2563eb;
+}
+
+/* Adaptación a pantallas pequeñas */
+@media (max-width: 420px) {
+  .encabezado-formulario h1 {
+    font-size: 22px;
+  }
+
+  .formulario-card ion-card-header {
+    padding: 17px 14px 10px;
+  }
+
+  .formulario-card ion-card-content {
+    padding: 8px 14px 16px;
+  }
+
+  .coordenadas-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}

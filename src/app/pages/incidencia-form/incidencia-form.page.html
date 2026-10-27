@@ -1,0 +1,359 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Nueva incidencia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding formulario-contenido">
+  <div class="formulario-container">
+
+    <div class="encabezado-formulario">
+      <div class="icono-encabezado">
+        <ion-icon name="clipboard-outline"></ion-icon>
+      </div>
+
+      <h1>Registrar incidencia</h1>
+      <p>
+        Registra un problema de infraestructura urbana en Quito.
+      </p>
+    </div>
+
+    <ion-card class="formulario-card">
+      <ion-card-header>
+        <ion-card-title>Información general</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <!-- Tipo de incidencia -->
+        <div class="campo">
+          <ion-label class="etiqueta">
+            Tipo de incidencia <span class="obligatorio">*</span>
+          </ion-label>
+
+          <ion-item class="campo-item" lines="none">
+            <ion-select
+              [(ngModel)]="tipo"
+              name="tipo"
+              interface="popover"
+              placeholder="Selecciona el tipo"
+              toggleIcon="chevron-down-outline"
+              expandedIcon="chevron-up-outline"
+              required
+            >
+              @for (opcion of tiposIncidencia; track opcion.valor) {
+                <ion-select-option [value]="opcion.valor">
+                  {{ opcion.etiqueta }}
+                </ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <!-- Descripción -->
+        <div class="campo">
+          <ion-label class="etiqueta">
+            Descripción <span class="obligatorio">*</span>
+          </ion-label>
+
+          <ion-item class="campo-item textarea-item" lines="none">
+            <ion-textarea
+              [(ngModel)]="descripcion"
+              name="descripcion"
+              placeholder="Describe el problema observado..."
+              [autoGrow]="true"
+              [rows]="4"
+              maxlength="1000"
+              required
+            ></ion-textarea>
+          </ion-item>
+        </div>
+
+        <!-- Dirección -->
+        <div class="campo">
+          <ion-label class="etiqueta">
+            Dirección <span class="obligatorio">*</span>
+          </ion-label>
+
+          <ion-item class="campo-item" lines="none">
+            <ion-input
+              [(ngModel)]="direccion"
+              name="direccion"
+              placeholder="Ej. Av. Amazonas y Naciones Unidas"
+              maxlength="200"
+              required
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Sector -->
+        <div class="campo">
+          <ion-label class="etiqueta">
+            Sector <span class="obligatorio">*</span>
+          </ion-label>
+
+          <ion-item class="campo-item" lines="none">
+            <ion-input
+              [(ngModel)]="sector"
+              name="sector"
+              placeholder="Ej. La Mariscal"
+              maxlength="120"
+              required
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Prioridad -->
+        <div class="campo">
+          <ion-label class="etiqueta">
+            Prioridad <span class="obligatorio">*</span>
+          </ion-label>
+
+          <ion-item class="campo-item" lines="none">
+            <ion-select
+              [(ngModel)]="prioridad"
+              name="prioridad"
+              interface="popover"
+              placeholder="Selecciona la prioridad"
+              toggleIcon="chevron-down-outline"
+              expandedIcon="chevron-up-outline"
+              required
+            >
+              <ion-select-option value="baja">
+                Baja
+              </ion-select-option>
+
+              <ion-select-option value="media">
+                Media
+              </ion-select-option>
+
+              <ion-select-option value="alta">
+                Alta
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <p class="ayuda-campo">
+            Si seleccionas prioridad alta, debes adjuntar una fotografía.
+          </p>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Fotografía -->
+    <ion-card class="formulario-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="camera-outline"></ion-icon>
+          Fotografía
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p class="texto-seccion">
+          Captura una fotografía del problema con la cámara del dispositivo.
+        </p>
+
+        <ion-button
+          expand="block"
+          (click)="tomarFotografia()"
+          [disabled]="guardando"
+        >
+          <ion-icon name="camera-outline" slot="start"></ion-icon>
+          {{ fotografiaVistaPrevia ? 'Tomar otra fotografía' : 'Abrir cámara' }}
+        </ion-button>
+
+        @if (fotografiaVistaPrevia) {
+          <div class="foto-preview">
+            <ion-img
+              [src]="fotografiaVistaPrevia"
+              alt="Vista previa de la incidencia"
+            ></ion-img>
+
+            <ion-note color="success" class="nota-foto">
+              Fotografía capturada correctamente.
+            </ion-note>
+
+            <ion-button
+              expand="block"
+              fill="outline"
+              color="medium"
+              (click)="cancelarFotografia()"
+              [disabled]="guardando"
+            >
+              <ion-icon name="trash-outline" slot="start"></ion-icon>
+              Quitar fotografía
+            </ion-button>
+          </div>
+        }
+
+        @if (prioridad === 'alta' && !fotografiaVistaPrevia) {
+          <ion-note color="danger" class="nota-foto">
+            La prioridad alta requiere una fotografía.
+          </ion-note>
+        }
+      </ion-card-content>
+    </ion-card>
+
+    <!-- GPS y clima -->
+    <ion-card class="formulario-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="location-outline"></ion-icon>
+          Ubicación y clima
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p class="texto-seccion">
+          Obtén las coordenadas actuales o ingrésalas manualmente.
+        </p>
+
+        <ion-button
+          expand="block"
+          (click)="obtenerUbicacion()"
+          [disabled]="consultandoUbicacion || guardando"
+        >
+          @if (consultandoUbicacion) {
+            <ion-spinner name="crescent" slot="start"></ion-spinner>
+            Obteniendo ubicación...
+          } @else {
+            <ion-icon name="navigate-outline" slot="start"></ion-icon>
+            Obtener GPS y consultar clima
+          }
+        </ion-button>
+
+        <div class="coordenadas-grid">
+          <div class="campo">
+            <ion-label class="etiqueta">Latitud</ion-label>
+
+            <ion-item class="campo-item" lines="none">
+              <ion-input
+                type="number"
+                inputmode="decimal"
+                [(ngModel)]="latitud"
+                name="latitud"
+                placeholder="-0.1807"
+                min="-90"
+                max="90"
+              ></ion-input>
+            </ion-item>
+          </div>
+
+          <div class="campo">
+            <ion-label class="etiqueta">Longitud</ion-label>
+
+            <ion-item class="campo-item" lines="none">
+              <ion-input
+                type="number"
+                inputmode="decimal"
+                [(ngModel)]="longitud"
+                name="longitud"
+                placeholder="-78.4678"
+                min="-180"
+                max="180"
+              ></ion-input>
+            </ion-item>
+          </div>
+        </div>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          (click)="consultarClima()"
+          [disabled]="consultandoClima || guardando"
+        >
+          @if (consultandoClima) {
+            <ion-spinner name="crescent" slot="start"></ion-spinner>
+            Consultando clima...
+          } @else {
+            <ion-icon name="cloud-outline" slot="start"></ion-icon>
+            Consultar clima con estas coordenadas
+          }
+        </ion-button>
+
+        @if (clima) {
+          <div
+            class="clima-panel"
+            [class.clima-no-disponible]="!clima.disponible"
+            [class.clima-advertencia]="clima.advertencia"
+          >
+            <h3>
+              <ion-icon name="partly-sunny-outline"></ion-icon>
+              Resultado meteorológico
+            </h3>
+
+            <p>
+              <strong>Condición:</strong>
+              {{ clima.condicion }}
+            </p>
+
+            <p>
+              <strong>Temperatura:</strong>
+              @if (clima.temperatura !== null) {
+                {{ clima.temperatura }} °C
+              } @else {
+                No disponible
+              }
+            </p>
+
+            <p>
+              <strong>Precipitación:</strong>
+              @if (clima.precipitacionUltimaHora !== null) {
+                {{ clima.precipitacionUltimaHora }} mm
+              } @else {
+                No disponible
+              }
+            </p>
+
+            <ion-note
+              [color]="clima.advertencia ? 'warning' : (clima.disponible ? 'success' : 'medium')"
+            >
+              {{ clima.mensaje }}
+            </ion-note>
+          </div>
+        }
+
+        <p class="ayuda-campo">
+          La consulta del clima es informativa. Si el servicio no está
+          disponible, puedes continuar con el registro.
+        </p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Acciones -->
+    <div class="acciones-formulario">
+      <ion-button
+        expand="block"
+        size="large"
+        (click)="guardarIncidencia()"
+        [disabled]="guardando || consultandoUbicacion"
+      >
+        @if (guardando) {
+          <ion-spinner name="crescent" slot="start"></ion-spinner>
+          Guardando incidencia...
+        } @else {
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          Registrar incidencia
+        }
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        fill="clear"
+        color="medium"
+        routerLink="/incidencias"
+        [disabled]="guardando"
+      >
+        Cancelar y volver
+      </ion-button>
+    </div>
+
+    <p class="pie-formulario">
+      Los campos marcados con * son obligatorios.
+    </p>
+
+  </div>
+</ion-content>

@@ -1,0 +1,284 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Seguimiento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="pagina-seguimiento">
+
+    <div class="encabezado">
+      <h1>Mis incidencias</h1>
+      <p>
+        Selecciona las incidencias que deseas consultar
+        y mantener bajo seguimiento.
+      </p>
+    </div>
+
+    <!-- Selector de incidencias -->
+    <ion-card class="card-busqueda">
+      <ion-card-header>
+        <ion-card-title>Agregar incidencia</ion-card-title>
+        <ion-card-subtitle>
+          Selecciona una incidencia de la lista disponible.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-select
+            label="Incidencia disponible"
+            labelPlacement="floating"
+            placeholder="Selecciona una incidencia"
+            [(ngModel)]="codigoSeleccionado"
+            interface="action-sheet">
+
+            <ion-select-option
+              *ngFor="let incidencia of incidenciasDisponibles"
+              [value]="incidencia.codigo">
+
+              {{ incidencia.codigo }} — {{ incidencia.tipo }}
+              ({{ incidencia.sector }})
+
+            </ion-select-option>
+
+          </ion-select>
+        </ion-item>
+
+        <!-- Vista previa -->
+        <ion-card
+          class="vista-previa"
+          *ngIf="codigoSeleccionado">
+
+          <ion-card-content>
+            <ng-container
+              *ngFor="let incidencia of incidenciasDisponibles">
+
+              <div
+                *ngIf="incidencia.codigo === codigoSeleccionado">
+
+                <ion-badge
+                  [ngClass]="obtenerClaseEstado(incidencia.estado)">
+                  {{ incidencia.estado }}
+                </ion-badge>
+
+                <h3>{{ incidencia.tipo }}</h3>
+
+                <p>{{ incidencia.descripcion }}</p>
+
+                <p>
+                  <ion-icon name="location-outline"></ion-icon>
+                  {{ incidencia.direccion || 'Sin dirección registrada' }}
+                </p>
+
+                <p>
+                  Sector: {{ incidencia.sector || 'No registrado' }}
+                </p>
+
+                <p>
+                  Prioridad: {{ incidencia.prioridad }}
+                </p>
+
+              </div>
+            </ng-container>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-button
+          expand="block"
+          class="boton-agregar"
+          [disabled]="!codigoSeleccionado"
+          (click)="agregarSeguimiento()">
+
+          <ion-icon name="bookmark-outline" slot="start"></ion-icon>
+          Agregar a seguimiento
+
+        </ion-button>
+
+        <ion-text
+          color="medium"
+          *ngIf="!cargando && incidenciasDisponibles.length === 0">
+
+          <p>
+            No hay incidencias disponibles para agregar.
+            Puedes consultar las que ya guardaste abajo.
+          </p>
+
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Cargando -->
+    <div
+      class="estado-carga"
+      *ngIf="cargando || inicializando">
+
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Cargando incidencias...</p>
+    </div>
+
+    <!-- Error -->
+    <ion-card color="danger" *ngIf="error && !cargando">
+      <ion-card-content>
+        <p>{{ error }}</p>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="light"
+          (click)="cargarIncidencias()">
+
+          Reintentar
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Seguimiento guardado -->
+    <ng-container
+      *ngIf="!cargando && !inicializando && !error">
+
+      <div class="resumen">
+        <ion-icon name="bookmark" color="primary"></ion-icon>
+
+        <ion-text>
+          <strong>{{ codigosSeguimiento.length }}</strong>
+          incidencia(s) guardada(s) en seguimiento
+        </ion-text>
+      </div>
+
+      <!-- Incidencias guardadas -->
+      <ion-card
+        class="card-incidencia"
+        *ngFor="let incidencia of incidenciasEnSeguimiento">
+
+        <ion-card-content>
+          <div class="incidencia-cabecera">
+            <div>
+              <ion-text color="primary">
+                <strong>{{ incidencia.codigo }}</strong>
+              </ion-text>
+
+              <h2>{{ incidencia.tipo }}</h2>
+            </div>
+
+            <ion-badge
+              [ngClass]="obtenerClaseEstado(incidencia.estado)">
+
+              {{ incidencia.estado }}
+            </ion-badge>
+          </div>
+
+          <p class="descripcion">
+            {{ incidencia.descripcion }}
+          </p>
+
+          <ion-list lines="none">
+            <ion-item>
+              <ion-icon
+                name="location-outline"
+                slot="start"
+                color="medium">
+              </ion-icon>
+
+              <ion-label>
+                <h3>Ubicación</h3>
+                <p>{{ incidencia.direccion || 'Sin dirección registrada' }}</p>
+                <p>{{ incidencia.sector || 'No registrado' }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-icon
+                name="alert-circle-outline"
+                slot="start"
+                color="medium">
+              </ion-icon>
+
+              <ion-label>
+                <h3>Prioridad</h3>
+                <p>{{ incidencia.prioridad }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+          <div class="acciones">
+            <ion-button
+              fill="clear"
+              [routerLink]="[
+                '/incidencia-detalle',
+                incidencia.id
+              ]">
+
+              Ver detalle
+              <ion-icon
+                name="chevron-forward-outline"
+                slot="end">
+              </ion-icon>
+            </ion-button>
+
+            <ion-button
+              fill="outline"
+              color="danger"
+              (click)="quitarSeguimiento(incidencia)">
+
+              <ion-icon
+                name="bookmark"
+                slot="start">
+              </ion-icon>
+
+              Quitar
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Códigos guardados que ya no están en MockAPI -->
+      <ion-card
+        class="card-incidencia"
+        *ngFor="let codigo of codigosNoEncontrados">
+
+        <ion-card-content>
+          <ion-text color="medium">
+            <strong>{{ codigo }}</strong>
+          </ion-text>
+
+          <p>
+            No se encontró esta incidencia en los registros actuales.
+          </p>
+
+          <ion-button
+            fill="outline"
+            color="danger"
+            (click)="quitarCodigoNoEncontrado(codigo)">
+
+            Quitar de seguimiento
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Lista vacía -->
+      <ion-card
+        class="vacio"
+        *ngIf="codigosSeguimiento.length === 0">
+
+        <ion-card-content>
+          <ion-icon
+            name="bookmark-outline"
+            size="large"
+            color="medium">
+          </ion-icon>
+
+          <h2>Aún no tienes incidencias guardadas</h2>
+
+          <p>
+            Selecciona una incidencia de la lista superior
+            para comenzar tu seguimiento.
+          </p>
+        </ion-card-content>
+      </ion-card>
+
+    </ng-container>
+
+  </div>
+</ion-content>
