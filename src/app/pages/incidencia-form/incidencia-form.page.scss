@@ -1,304 +1,403 @@
+// ============================================================
+// Formulario – UrbanInspect DMQ
+// ============================================================
 
-:host {
-  display: block;
+:host { display: block; }
+
+.form-content {
+  --background: #f0f4fb;
 }
 
-.formulario-contenido {
-  --background: #f4f7fb;
-}
-
-.formulario-container {
+.form-container {
   width: 100%;
   max-width: 760px;
   margin: 0 auto;
-  padding-bottom: 28px;
+  padding: 16px 16px 40px;
 }
 
-.encabezado-formulario {
-  padding: 18px 8px 20px;
+// ── Hero ───────────────────────────────────────────────────
+.form-hero {
+  text-align: center;
+  padding: 24px 8px 20px;
 }
 
-.icono-encabezado {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  margin-bottom: 14px;
-  border-radius: 16px;
-  background: #dbeafe;
-  color: #1d4ed8;
-  font-size: 28px;
+.form-hero-icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #3578ef, #1a5fd4);
+  color: #fff;
+  font-size: 30px;
+  margin: 0 auto 16px;
+  box-shadow: 0 6px 20px rgba(26,95,212,.35);
 }
 
-.encabezado-formulario h1 {
+.form-hero-title {
   margin: 0 0 8px;
-  color: #172b4d;
-  font-size: 25px;
-  font-weight: 750;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0d1b3e;
+  letter-spacing: -0.4px;
 }
 
-.encabezado-formulario p {
+.form-hero-sub {
   margin: 0;
-  color: #64748b;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 13px;
+  color: #9ba8c0;
+  line-height: 1.5;
 }
 
-.formulario-card {
-  margin: 0 0 18px;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+// ── Sección ────────────────────────────────────────────────
+.form-section {
   background: #ffffff;
-  box-shadow: 0 4px 16px rgb(15 23 42 / 5%);
+  border-radius: 18px;
+  border: 1px solid #dde5f4;
+  box-shadow: 0 4px 16px rgba(26,95,212,.07);
+  padding: 20px 18px 22px;
+  margin-bottom: 14px;
 }
 
-.formulario-card ion-card-header {
-  padding: 20px 18px 12px;
-}
-
-.formulario-card ion-card-title {
+.section-tag {
   display: flex;
   align-items: center;
-  gap: 9px;
-  color: #172b4d;
-  font-size: 17px;
-  font-weight: 700;
-}
-
-.formulario-card ion-card-title ion-icon {
-  color: #2563eb;
-  font-size: 22px;
-}
-
-.formulario-card ion-card-content {
-  padding: 8px 18px 20px;
-}
-
-.campo {
+  gap: 10px;
   margin-bottom: 18px;
 }
 
-.campo:last-child {
-  margin-bottom: 0;
+.section-num {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3578ef, #1a5fd4);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 
-.etiqueta {
+.section-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0d1b3e;
+  letter-spacing: -0.2px;
+}
+
+.section-desc {
+  margin: -6px 0 16px;
+  font-size: 13px;
+  color: #9ba8c0;
+  line-height: 1.5;
+}
+
+// ── Campos ─────────────────────────────────────────────────
+.form-field {
+  margin-bottom: 16px;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.field-label {
   display: block;
   margin: 0 0 8px 2px;
-  color: #334155;
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.obligatorio {
-  color: #dc2626;
-}
-
-.campo-item {
-  --background: #f8fafc;
-  --border-color: #dbe3ee;
-  --border-radius: 10px;
-  --border-style: solid;
-  --border-width: 1px;
-  --padding-start: 12px;
-  --inner-padding-end: 10px;
-  --min-height: 48px;
-
-  border: 1px solid #dbe3ee;
-  border-radius: 10px;
-  overflow: visible;
-}
-
-.campo-item:focus-within {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgb(37 99 235 / 10%);
-}
-
-.campo-item ion-input,
-.campo-item ion-textarea,
-.campo-item ion-select {
-  width: 100%;
-  color: #1e293b;
-  font-size: 14px;
-  --placeholder-color: #94a3b8;
-  --placeholder-opacity: 1;
-}
-
-.campo-item ion-select {
-  max-width: 100%;
-  min-height: 46px;
-}
-
-.textarea-item {
-  --padding-top: 10px;
-  --padding-bottom: 10px;
-  align-items: flex-start;
-}
-
-.textarea-item ion-textarea {
-  min-height: 100px;
-}
-
-.ayuda-campo {
-  margin: 8px 2px 0;
-  color: #64748b;
   font-size: 12px;
-  line-height: 1.6;
+  font-weight: 700;
+  color: #2a3a5c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.texto-seccion {
-  margin: 0 0 16px;
-  color: #64748b;
+.required { color: #ef4444; }
+
+.field-item {
+  --background: #f8faff;
+  --border-radius: 12px;
+  --padding-start: 14px;
+  --inner-padding-end: 12px;
+  --min-height: 52px;
+  border: 1.5px solid #dde5f4;
+  border-radius: 12px;
+  overflow: visible;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus-within {
+    border-color: #1a5fd4;
+    box-shadow: 0 0 0 3px rgba(26,95,212,.12);
+  }
+}
+
+.field-textarea {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  align-items: flex-start;
+
+  ion-textarea { min-height: 100px; font-size: 14px; }
+}
+
+.field-icon {
+  font-size: 18px;
+  color: #9ba8c0;
+  margin-right: 4px;
+}
+
+.field-hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 7px 2px 0;
+  font-size: 11px;
+  color: #9ba8c0;
+  line-height: 1.5;
+
+  ion-icon { font-size: 13px; color: #f59e0b; flex-shrink: 0; }
+}
+
+.char-count {
+  margin: 5px 2px 0;
+  font-size: 11px;
+  color: #c0cde8;
+  text-align: right;
+}
+
+// ── Priority chips ─────────────────────────────────────────
+.priority-chips {
+  display: flex;
+  gap: 10px;
+}
+
+.prio-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: center;
+  padding: 10px 8px;
+  border-radius: 12px;
+  border: 1.5px solid #dde5f4;
+  background: #f8faff;
   font-size: 13px;
-  line-height: 1.6;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: all 0.15s;
+
+  ion-icon { font-size: 16px; }
+
+  &.prio-baja {
+    color: #065f46;
+    &.prio-active {
+      background: #d1fae5;
+      border-color: #22c55e;
+      box-shadow: 0 3px 10px rgba(34,197,94,.25);
+    }
+  }
+  &.prio-media {
+    color: #92400e;
+    &.prio-active {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      box-shadow: 0 3px 10px rgba(245,158,11,.25);
+    }
+  }
+  &.prio-alta {
+    color: #b91c1c;
+    &.prio-active {
+      background: #fee2e2;
+      border-color: #ef4444;
+      box-shadow: 0 3px 10px rgba(239,68,68,.25);
+    }
+  }
+}
+
+// ── Alerta ─────────────────────────────────────────────────
+.alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+
+  ion-icon { font-size: 18px; flex-shrink: 0; }
+
+  &.alert-danger {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+  }
+}
+
+// ── Fotografía ─────────────────────────────────────────────
+.btn-camera {
+  --border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.photo-preview {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid #bfdbfe;
+  background: #eff6ff;
+  margin-bottom: 10px;
+
+  ion-img {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+  }
+  ion-img::part(image) {
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+  }
+}
+
+.photo-success-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 600;
+
+  ion-icon { font-size: 16px; color: #22c55e; }
+}
+
+.btn-remove-photo {
+  --border-radius: 12px;
+}
+
+// ── GPS ────────────────────────────────────────────────────
+.btn-gps {
+  --border-radius: 12px;
+  --background: linear-gradient(135deg, #3578ef, #1a5fd4);
+  --box-shadow: 0 4px 16px rgba(26,95,212,.30);
+  margin-bottom: 14px;
+}
+
+.coords-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+// ── Panel clima ────────────────────────────────────────────
+.clima-panel {
+  border-radius: 14px;
+  border: 1.5px solid #bbf7d0;
+  background: #f0fdf4;
+  padding: 16px;
+  margin-top: 14px;
+
+  &.clima-warn {
+    border-color: #fcd34d;
+    background: #fffbeb;
+    .clima-header { color: #92400e; }
+  }
+
+  &.clima-unavailable {
+    border-color: #dde5f4;
+    background: #f8faff;
+    .clima-header { color: #6b7a9c; }
+  }
+}
+
+.clima-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #166534;
+  margin-bottom: 14px;
+
+  ion-icon { font-size: 20px; }
+}
+
+.clima-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.clima-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.clima-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #9ba8c0;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.clima-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2a3a5c;
+}
+
+.clima-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.5;
+  border-radius: 8px;
+  padding: 8px 10px;
+
+  ion-icon { font-size: 14px; flex-shrink: 0; }
+
+  &.note-ok   { background: #dcfce7; color: #166534; }
+  &.note-warn { background: #fef9c3; color: #92400e; }
+  &.note-na   { background: #f1f5f9; color: #6b7a9c; }
+}
+
+// ── Acciones finales ───────────────────────────────────────
+.form-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.btn-submit {
+  --border-radius: 14px;
+  --background: linear-gradient(135deg, #3578ef, #1a5fd4);
+  --box-shadow: 0 6px 20px rgba(26,95,212,.35);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.2px;
 }
 
 ion-button {
-  --border-radius: 10px;
-  font-weight: 650;
+  --border-radius: 12px;
+  font-weight: 700;
   text-transform: none;
   letter-spacing: 0;
 }
 
-ion-button ion-icon {
-  font-size: 19px;
-}
-
-.foto-preview {
-  margin-top: 16px;
-  padding: 12px;
-  border: 1px solid #dbeafe;
-  border-radius: 12px;
-  background: #f8fbff;
-}
-
-.foto-preview ion-img {
-  display: block;
-  max-height: 320px;
-  overflow: hidden;
-  border-radius: 8px;
-  background: #e2e8f0;
-}
-
-.foto-preview ion-img::part(image) {
-  width: 100%;
-  max-height: 320px;
-  object-fit: contain;
-}
-
-.nota-foto {
-  display: block;
-  margin: 10px 2px;
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.coordenadas-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 12px;
-  margin: 18px 0;
-}
-
-.coordenadas-grid .campo {
-  min-width: 0;
-  margin-bottom: 0;
-}
-
-.clima-panel {
-  margin-top: 18px;
-  padding: 16px;
-  border: 1px solid #bbf7d0;
-  border-radius: 12px;
-  background: #f0fdf4;
-}
-
-.clima-panel h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 14px;
-  color: #166534;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.clima-panel h3 ion-icon {
-  font-size: 22px;
-}
-
-.clima-panel p {
-  margin: 8px 0;
-  color: #334155;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.clima-panel ion-note {
-  display: block;
-  margin-top: 12px;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.clima-panel.clima-advertencia {
-  border-color: #fcd34d;
-  background: #fffbeb;
-}
-
-.clima-panel.clima-advertencia h3 {
-  color: #92400e;
-}
-
-.clima-panel.clima-no-disponible {
-  border-color: #cbd5e1;
-  background: #f8fafc;
-}
-
-.clima-panel.clima-no-disponible h3 {
-  color: #475569;
-}
-
-.acciones-formulario {
-  display: grid;
-  gap: 8px;
-  margin-top: 24px;
-}
-
-.acciones-formulario ion-button {
-  margin: 0;
-}
-
-.pie-formulario {
-  margin: 16px 4px 0;
-  color: #94a3b8;
-  font-size: 11px;
+.form-footnote {
+  margin: 14px 0 0;
   text-align: center;
+  font-size: 11px;
+  color: #9ba8c0;
 }
 
-/* Las listas de ion-select usan una ventana flotante.
-   No se les asigna posición fija dentro del formulario. */
-ion-select {
-  --highlight-color-focused: #2563eb;
-}
-
-/* Adaptación a pantallas pequeñas */
+// ── Responsive ────────────────────────────────────────────
 @media (max-width: 420px) {
-  .encabezado-formulario h1 {
-    font-size: 22px;
-  }
-
-  .formulario-card ion-card-header {
-    padding: 17px 14px 10px;
-  }
-
-  .formulario-card ion-card-content {
-    padding: 8px 14px 16px;
-  }
-
-  .coordenadas-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-  }
+  .coords-grid { grid-template-columns: 1fr; }
+  .clima-body  { grid-template-columns: 1fr 1fr; }
+  .priority-chips { flex-direction: column; }
 }

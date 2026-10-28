@@ -1,171 +1,231 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>UrbanInspect | Dashboard</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <!-- Logo + marca -->
+    <div class="toolbar-brand" slot="start">
+      <div class="toolbar-logo">
+        <ion-icon name="location" class="logo-icon"></ion-icon>
+      </div>
+      <div>
+        <span class="toolbar-appname">UrbanInspect</span>
+        <span class="toolbar-subtitle">DMQ · Quito</span>
+      </div>
+    </div>
+
+    <!-- Botón actualizar -->
+    <ion-buttons slot="end">
+      <button class="toolbar-refresh-btn" (click)="cargarIncidencias()" title="Actualizar datos">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="dashboard-content">
-  <div class="dashboard-container">
+<ion-content class="dash-content">
 
-    <!-- Encabezado -->
-    <div class="welcome-section">
-      <div>
-        <p class="eyebrow">PANEL DE CONTROL</p>
-        <h1>Resumen general</h1>
-        <p class="subtitle">
-          Supervisa las incidencias de infraestructura urbana de Quito.
-        </p>
+  <!-- ── Hero banner ──────────────────────────────────────── -->
+  <div class="hero-banner">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="hero-eyebrow">PANEL DE CONTROL</p>
+        <h1 class="hero-title">Resumen general</h1>
+        <p class="hero-subtitle">Monitoreo de infraestructura urbana de Quito en tiempo real.</p>
       </div>
+      <div class="hero-illustration">
+        <ion-icon name="map-outline" class="hero-map-icon"></ion-icon>
+        <div class="hero-dot hero-dot-1"></div>
+        <div class="hero-dot hero-dot-2"></div>
+        <div class="hero-dot hero-dot-3"></div>
+      </div>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 C360,60 1080,0 1440,40 L1440,60 L0,60 Z" fill="#f0f4fb"/>
+      </svg>
+    </div>
+  </div>
 
-      <button class="refresh-button" (click)="cargarIncidencias()">
-        ↻ Actualizar
+  <div class="dash-container">
+
+    <!-- ── Estados de carga / error ──────────────────────── -->
+    <div class="state-loading" *ngIf="cargando">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando datos de Quito...</p>
+    </div>
+
+    <div class="state-error" *ngIf="error && !cargando">
+      <ion-icon name="cloud-offline-outline"></ion-icon>
+      <p>{{ error }}</p>
+      <button class="btn-retry" (click)="cargarIncidencias()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        Reintentar
       </button>
     </div>
 
-    <!-- Mensajes -->
-    <div class="message loading-message" *ngIf="cargando">
-      Cargando incidencias...
+    <!-- ── KPI Cards ─────────────────────────────────────── -->
+    <div class="kpi-grid fade-in" *ngIf="!cargando && !error">
+
+      <article class="kpi-card kpi-total">
+        <div class="kpi-icon-wrap kpi-icon-blue">
+          <ion-icon name="layers-outline"></ion-icon>
+        </div>
+        <div class="kpi-body">
+          <p class="kpi-label">Total registros</p>
+          <h2 class="kpi-value">{{ totalIncidencias }}</h2>
+          <span class="kpi-hint">Esta página</span>
+        </div>
+        <div class="kpi-trend kpi-trend-blue">
+          <ion-icon name="stats-chart-outline"></ion-icon>
+        </div>
+      </article>
+
+      <article class="kpi-card kpi-pending">
+        <div class="kpi-icon-wrap kpi-icon-amber">
+          <ion-icon name="time-outline"></ion-icon>
+        </div>
+        <div class="kpi-body">
+          <p class="kpi-label">Pendientes</p>
+          <h2 class="kpi-value">{{ pendientes }}</h2>
+          <span class="kpi-hint">Esperando atención</span>
+        </div>
+        <div class="kpi-trend kpi-trend-amber">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+        </div>
+      </article>
+
+      <article class="kpi-card kpi-progress">
+        <div class="kpi-icon-wrap kpi-icon-sky">
+          <ion-icon name="construct-outline"></ion-icon>
+        </div>
+        <div class="kpi-body">
+          <p class="kpi-label">En progreso</p>
+          <h2 class="kpi-value">{{ enProgreso }}</h2>
+          <span class="kpi-hint">En proceso</span>
+        </div>
+        <div class="kpi-trend kpi-trend-sky">
+          <ion-icon name="trending-up-outline"></ion-icon>
+        </div>
+      </article>
+
+      <article class="kpi-card kpi-resolved">
+        <div class="kpi-icon-wrap kpi-icon-green">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </div>
+        <div class="kpi-body">
+          <p class="kpi-label">Resueltas</p>
+          <h2 class="kpi-value">{{ resueltas }}</h2>
+          <span class="kpi-hint">Atendidas</span>
+        </div>
+        <div class="kpi-trend kpi-trend-green">
+          <ion-icon name="checkmark-done-outline"></ion-icon>
+        </div>
+      </article>
+
     </div>
 
-    <div class="message error-message" *ngIf="error">
-      {{ error }}
-      <button (click)="cargarIncidencias()">Reintentar</button>
-    </div>
+    <!-- ── Accesos rápidos ───────────────────────────────── -->
+    <section class="section fade-in" *ngIf="!cargando && !error">
+      <div class="section-header">
+        <h2 class="section-title">Accesos rápidos</h2>
+      </div>
 
-    <!-- Estadísticas -->
-    <div class="stats-grid" *ngIf="!cargando && !error">
-      <article class="stat-card total-card">
-        <div class="stat-icon">📋</div>
-        <p>Total consultado</p>
-        <h2>{{ totalIncidencias }}</h2>
-        <span>Registros de esta página</span>
-      </article>
+      <div class="quick-grid">
 
-      <article class="stat-card pending-card">
-        <div class="stat-icon">⏳</div>
-        <p>Pendientes</p>
-        <h2>{{ pendientes }}</h2>
-        <span>Esperando atención</span>
-      </article>
-
-      <article class="stat-card progress-card">
-        <div class="stat-icon">🔧</div>
-        <p>En progreso</p>
-        <h2>{{ enProgreso }}</h2>
-        <span>En proceso de atención</span>
-      </article>
-
-      <article class="stat-card resolved-card">
-        <div class="stat-icon">✓</div>
-        <p>Resueltas</p>
-        <h2>{{ resueltas }}</h2>
-        <span>Atendidas</span>
-      </article>
-    </div>
-
-    <!-- Accesos rápidos -->
-    <section class="quick-actions">
-      <h2>Accesos rápidos</h2>
-
-      <div class="actions-grid">
-        <button class="action-card" routerLink="/incidencias">
-          <span class="action-icon">📑</span>
-          <span>
+        <button class="quick-card quick-list" routerLink="/incidencias">
+          <div class="quick-icon-wrap">
+            <ion-icon name="list-outline"></ion-icon>
+          </div>
+          <div class="quick-text">
             <strong>Ver incidencias</strong>
-            <small>Consultar reportes registrados</small>
-          </span>
-          <span class="arrow">›</span>
+            <small>Consultar todos los reportes</small>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="quick-arrow"></ion-icon>
         </button>
 
-        <button class="action-card" routerLink="/incidencia-form">
-          <span class="action-icon">＋</span>
-          <span>
+        <button class="quick-card quick-new" routerLink="/incidencia-form">
+          <div class="quick-icon-wrap quick-icon-accent">
+            <ion-icon name="add-circle-outline"></ion-icon>
+          </div>
+          <div class="quick-text">
             <strong>Nueva incidencia</strong>
             <small>Registrar un problema urbano</small>
-          </span>
-          <span class="arrow">›</span>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="quick-arrow"></ion-icon>
         </button>
 
-        <button class="action-card" routerLink="/seguimiento">
-          <span class="action-icon">📍</span>
-          <span>
+        <button class="quick-card quick-track" routerLink="/seguimiento">
+          <div class="quick-icon-wrap quick-icon-violet">
+            <ion-icon name="bookmark-outline"></ion-icon>
+          </div>
+          <div class="quick-text">
             <strong>Seguimiento</strong>
-            <small>Revisar incidencias marcadas</small>
-          </span>
-          <span class="arrow">›</span>
+            <small>Mis incidencias guardadas</small>
+          </div>
+          <ion-icon name="chevron-forward-outline" class="quick-arrow"></ion-icon>
         </button>
+
       </div>
     </section>
 
-    <!-- Incidencias recientes -->
-    <section class="recent-section">
-      <div class="section-heading">
+    <!-- ── Tabla incidencias recientes ──────────────────── -->
+    <section class="section fade-in" *ngIf="!cargando && !error">
+      <div class="section-header">
         <div>
-          <h2>Incidencias recientes</h2>
-          <p>Últimos registros recibidos de MockAPI</p>
+          <h2 class="section-title">Incidencias recientes</h2>
+          <p class="section-sub">Últimos reportes registrados</p>
+        </div>
+        <button routerLink="/incidencias" class="btn-ver-todas">
+          Ver todas <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
+      </div>
+
+      <!-- Cards móvil (incidencias recientes) -->
+      <div class="incident-list">
+        <div
+          class="incident-row"
+          *ngFor="let inc of incidenciasRecientes"
+          (click)="abrirIncidencia(inc)"
+          title="Ver detalle">
+          <div class="inc-left">
+            <span class="inc-dot"
+              [ngClass]="{
+                'dot-pending':  inc.estado === 'pendiente',
+                'dot-progress': inc.estado === 'en progreso',
+                'dot-resolved': inc.estado === 'resuelta'
+              }">
+            </span>
+            <div>
+              <p class="inc-code">{{ inc.codigo }}</p>
+              <p class="inc-type">{{ inc.tipo }}</p>
+            </div>
+          </div>
+          <div class="inc-right">
+            <span class="inc-badge-prior"
+              [ngClass]="'prior-' + inc.prioridad">
+              {{ inc.prioridad }}
+            </span>
+            <span class="inc-badge-status"
+              [ngClass]="{
+                'status-pending':  inc.estado === 'pendiente',
+                'status-progress': inc.estado === 'en progreso',
+                'status-resolved': inc.estado === 'resuelta'
+              }">
+              {{ inc.estado }}
+            </span>
+            <ion-icon name="chevron-forward-outline" class="inc-arrow"></ion-icon>
+          </div>
         </div>
 
-        <button routerLink="/incidencias" class="view-all-button">
-          Ver todas →
-        </button>
-      </div>
-
-      <div class="table-wrapper" *ngIf="!cargando && !error">
-        <table>
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Tipo</th>
-              <th>Sector</th>
-              <th>Prioridad</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-
-
-          <tbody>
-            <!-- Mostrar las incidencias registradas -->
-            <tr *ngFor="let incidencia of incidenciasRecientes" (click)="abrirIncidencia(incidencia)"
-              class="clickable-row" title="Presiona para ver el detalle">
-              <td class="code-cell">
-                {{ incidencia.codigo }}
-              </td>
-
-              <td>{{ incidencia.tipo }}</td>
-
-              <td>{{ incidencia.sector }}</td>
-
-              <td>
-                <span class="priority-badge" [ngClass]="'priority-' + incidencia.prioridad">
-                  {{ incidencia.prioridad }}
-                </span>
-              </td>
-
-              <td>
-                <span class="status-badge" [ngClass]="{
-          'status-pending': incidencia.estado === 'pendiente',
-          'status-progress': incidencia.estado === 'en progreso',
-          'status-resolved': incidencia.estado === 'resuelta'
-        }">
-                  {{ incidencia.estado }}
-                </span>
-              </td>
-            </tr>
-
-            <!-- Mostrar el mensaje únicamente cuando no hay incidencias -->
-            <tr *ngIf="incidenciasRecientes.length === 0">
-              <td colspan="5" class="empty-state">
-                No hay incidencias para mostrar.
-              </td>
-            </tr>
-          </tbody>
-
-        </table>
+        <div class="incident-empty" *ngIf="incidenciasRecientes.length === 0">
+          <ion-icon name="document-outline"></ion-icon>
+          <p>No hay incidencias para mostrar</p>
+        </div>
       </div>
     </section>
 
-    <footer class="dashboard-footer">
-      UrbanInspect · Monitoreo de infraestructura urbana de Quito
+    <!-- ── Footer ────────────────────────────────────────── -->
+    <footer class="dash-footer">
+      <ion-icon name="shield-checkmark-outline"></ion-icon>
+      UrbanInspect · Municipio del Distrito Metropolitano de Quito
     </footer>
 
   </div>

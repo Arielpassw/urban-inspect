@@ -1,2 +1,133 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// ============================================================
+// UrbanInspect – Sistema de diseño DMQ
+// Paleta institucional moderna con acentos juveniles
+// ============================================================
+
+// ── Google Fonts ────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+// ── Tokens de color ─────────────────────────────────────────
+:root {
+  // Primario – Azul institucional DMQ
+  --color-primary-50:  #e8f0fe;
+  --color-primary-100: #c5d8fc;
+  --color-primary-200: #93b8f9;
+  --color-primary-300: #5e96f5;
+  --color-primary-400: #3578ef;
+  --color-primary-500: #1a5fd4;  // base
+  --color-primary-600: #154db3;
+  --color-primary-700: #0f3d92;
+  --color-primary-800: #092e72;
+  --color-primary-900: #051e52;
+
+  // Accent – Cyan vibrante
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+
+  // Gradient – hero & banners
+  --gradient-brand: linear-gradient(135deg, #1a5fd4 0%, #0f3d92 60%, #051e52 100%);
+  --gradient-hero:  linear-gradient(135deg, #1a5fd4 0%, #06b6d4 100%);
+  --gradient-card:  linear-gradient(135deg, #3578ef 0%, #1a5fd4 100%);
+
+  // Superficie
+  --surface-bg:     #f0f4fb;
+  --surface-card:   #ffffff;
+  --surface-card-2: #f8faff;
+  --surface-glass:  rgba(255,255,255,0.75);
+
+  // Texto
+  --text-heading:   #0d1b3e;
+  --text-body:      #2a3a5c;
+  --text-muted:     #6b7a9c;
+  --text-subtle:    #9ba8c0;
+  --text-on-dark:   #ffffff;
+
+  // Bordes
+  --border-default: #dde5f4;
+  --border-focus:   #3578ef;
+
+  // Sombras
+  --shadow-xs: 0 1px 3px rgba(26,95,212,.06);
+  --shadow-sm: 0 4px 12px rgba(26,95,212,.08);
+  --shadow-md: 0 8px 24px rgba(26,95,212,.12);
+  --shadow-lg: 0 16px 40px rgba(26,95,212,.16);
+
+  // Semáforos de estado
+  --estado-pendiente-bg:  #fff3cd;
+  --estado-pendiente-text:#966300;
+  --estado-pendiente-ring:#f6c800;
+
+  --estado-progreso-bg:   #dbeafe;
+  --estado-progreso-text: #1d4ed8;
+  --estado-progreso-ring: #3b82f6;
+
+  --estado-resuelta-bg:   #dcfce7;
+  --estado-resuelta-text: #166534;
+  --estado-resuelta-ring: #22c55e;
+
+  // Prioridades
+  --prior-alta-bg:    #fee2e2;
+  --prior-alta-text:  #b91c1c;
+  --prior-media-bg:   #fef3c7;
+  --prior-media-text: #92400e;
+  --prior-baja-bg:    #d1fae5;
+  --prior-baja-text:  #065f46;
+
+  // Radio & espaciado
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  // ── Variables Ionic sobrescritas ────────────────────────────
+  --ion-font-family: 'Plus Jakarta Sans', sans-serif;
+  --ion-background-color: var(--surface-bg);
+  --ion-text-color: var(--text-body);
+
+  --ion-color-primary:           #1a5fd4;
+  --ion-color-primary-rgb:       26, 95, 212;
+  --ion-color-primary-contrast:  #ffffff;
+  --ion-color-primary-shade:     #154db3;
+  --ion-color-primary-tint:      #3578ef;
+
+  --ion-color-secondary:         #06b6d4;
+  --ion-color-secondary-rgb:     6, 182, 212;
+  --ion-color-secondary-contrast:#ffffff;
+  --ion-color-secondary-shade:   #0891b2;
+  --ion-color-secondary-tint:    #22d3ee;
+
+  --ion-color-success:           #22c55e;
+  --ion-color-success-rgb:       34, 197, 94;
+  --ion-color-success-contrast:  #ffffff;
+  --ion-color-success-shade:     #16a34a;
+  --ion-color-success-tint:      #4ade80;
+
+  --ion-color-warning:           #f59e0b;
+  --ion-color-warning-rgb:       245, 158, 11;
+  --ion-color-warning-contrast:  #ffffff;
+  --ion-color-warning-shade:     #d97706;
+  --ion-color-warning-tint:      #fbbf24;
+
+  --ion-color-danger:            #ef4444;
+  --ion-color-danger-rgb:        239, 68, 68;
+  --ion-color-danger-contrast:   #ffffff;
+  --ion-color-danger-shade:      #dc2626;
+  --ion-color-danger-tint:       #f87171;
+
+  --ion-color-medium:            #6b7a9c;
+  --ion-color-medium-rgb:        107, 122, 156;
+  --ion-color-medium-contrast:   #ffffff;
+  --ion-color-medium-shade:      #5a6888;
+  --ion-color-medium-tint:       #8898b8;
+
+  --ion-color-light:             #f0f4fb;
+  --ion-color-light-rgb:         240, 244, 251;
+  --ion-color-light-contrast:    #0d1b3e;
+  --ion-color-light-shade:       #dde5f4;
+  --ion-color-light-tint:        #f8faff;
+
+  --ion-toolbar-background:      #1a5fd4;
+  --ion-toolbar-color:           #ffffff;
+}

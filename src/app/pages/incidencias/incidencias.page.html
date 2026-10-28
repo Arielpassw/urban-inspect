@@ -1,221 +1,181 @@
 
-<ion-header>
-  <ion-toolbar color="primary">
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard" text="" color="primary"></ion-back-button>
+    </ion-buttons>
     <ion-title>Incidencias</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/incidencia-form" fill="solid" color="primary" class="btn-nueva-header">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Nueva
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="pagina-incidencias">
+<ion-content class="inc-content">
+  <div class="inc-container">
 
-    <div class="encabezado">
+    <!-- ── Encabezado ──────────────────────────────────── -->
+    <div class="inc-header">
       <div>
-        <h1>Gestión de incidencias</h1>
-        <p>Consulta y filtra los problemas reportados en la ciudad.</p>
+        <h1 class="inc-title">Gestión de incidencias</h1>
+        <p class="inc-subtitle">Consulta y filtra los problemas reportados en Quito</p>
       </div>
-
-      <ion-button routerLink="/incidencia-form" color="primary">
-        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-        Nueva incidencia
-      </ion-button>
     </div>
 
-    <!-- Búsqueda -->
+    <!-- ── Buscador ────────────────────────────────────── -->
     <ion-searchbar
       [(ngModel)]="busqueda"
-      placeholder="Buscar por código, tipo, sector o dirección"
+      placeholder="Buscar por código, tipo o sector…"
       [debounce]="300"
       animated="true">
     </ion-searchbar>
 
-    <!-- Filtros -->
-    <ion-card class="card-filtros">
-      <ion-card-header>
-        <ion-card-title>Filtros</ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="12" size-md="5">
-              <ion-item>
-                <ion-select
-                  label="Estado"
-                  labelPlacement="floating"
-                  placeholder="Todos los estados"
-                  [(ngModel)]="filtroEstado">
-                  <ion-select-option value="">Todos</ion-select-option>
-                  <ion-select-option value="pendiente">Pendiente</ion-select-option>
-                  <ion-select-option value="en progreso">En progreso</ion-select-option>
-                  <ion-select-option value="resuelta">Resuelta</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size="12" size-md="5">
-              <ion-item>
-                <ion-select
-                  label="Prioridad"
-                  labelPlacement="floating"
-                  placeholder="Todas las prioridades"
-                  [(ngModel)]="filtroPrioridad">
-                  <ion-select-option value="">Todas</ion-select-option>
-                  <ion-select-option value="alta">Alta</ion-select-option>
-                  <ion-select-option value="media">Media</ion-select-option>
-                  <ion-select-option value="baja">Baja</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size="12" size-md="2">
-              <ion-button
-                expand="block"
-                fill="outline"
-                color="medium"
-                class="boton-limpiar"
-                (click)="limpiarFiltros()">
-                <ion-icon name="refresh-outline" slot="start"></ion-icon>
-                Limpiar
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Cargando -->
-    <div class="estado-carga" *ngIf="cargando">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Cargando incidencias...</p>
-    </div>
-
-    <!-- Error -->
-    <ion-card color="danger" *ngIf="error && !cargando">
-      <ion-card-content>
-        <ion-icon name="alert-circle-outline"></ion-icon>
-        {{ error }}
-
-        <ion-button
-          expand="block"
-          fill="outline"
-          color="light"
-          (click)="cargarIncidencias()">
-          Reintentar
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Resultados -->
-    <ng-container *ngIf="!cargando && !error">
-      <div class="resumen-resultados">
-        <ion-text color="medium">
-          {{ incidenciasFiltradas.length }}
-          resultado(s) en esta página
-        </ion-text>
+    <!-- ── Filtros chips ────────────────────────────────── -->
+    <div class="filter-panel">
+      <div class="filter-row">
+        <span class="filter-label">Estado:</span>
+        <div class="chip-group">
+          <button class="chip" [class.chip-active]="filtroEstado === ''"
+            (click)="filtroEstado = ''">Todos</button>
+          <button class="chip chip-pending" [class.chip-active]="filtroEstado === 'pendiente'"
+            (click)="filtroEstado = 'pendiente'">Pendiente</button>
+          <button class="chip chip-progress" [class.chip-active]="filtroEstado === 'en progreso'"
+            (click)="filtroEstado = 'en progreso'">En progreso</button>
+          <button class="chip chip-resolved" [class.chip-active]="filtroEstado === 'resuelta'"
+            (click)="filtroEstado = 'resuelta'">Resuelta</button>
+        </div>
       </div>
 
-      <ion-card
-        class="card-incidencia"
-        *ngFor="let incidencia of incidenciasFiltradas">
+      <div class="filter-row">
+        <span class="filter-label">Prioridad:</span>
+        <div class="chip-group">
+          <button class="chip" [class.chip-active]="filtroPrioridad === ''"
+            (click)="filtroPrioridad = ''">Todas</button>
+          <button class="chip chip-alta" [class.chip-active]="filtroPrioridad === 'alta'"
+            (click)="filtroPrioridad = 'alta'">Alta</button>
+          <button class="chip chip-media" [class.chip-active]="filtroPrioridad === 'media'"
+            (click)="filtroPrioridad = 'media'">Media</button>
+          <button class="chip chip-baja" [class.chip-active]="filtroPrioridad === 'baja'"
+            (click)="filtroPrioridad = 'baja'">Baja</button>
+        </div>
+      </div>
 
-        <ion-card-content>
-          <div class="incidencia-superior">
-            <div>
-              <ion-text color="primary">
-                <strong>{{ incidencia.codigo }}</strong>
-              </ion-text>
+      <button class="btn-clear-filters" (click)="limpiarFiltros()" *ngIf="filtroEstado || filtroPrioridad || busqueda">
+        <ion-icon name="close-circle-outline"></ion-icon>
+        Limpiar filtros
+      </button>
+    </div>
 
-              <h2>{{ incidencia.tipo }}</h2>
+    <!-- ── Cargando ────────────────────────────────────── -->
+    <div class="state-center" *ngIf="cargando">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando incidencias de Quito…</p>
+    </div>
+
+    <!-- ── Error ───────────────────────────────────────── -->
+    <div class="state-error-box" *ngIf="error && !cargando">
+      <ion-icon name="cloud-offline-outline"></ion-icon>
+      <p>{{ error }}</p>
+      <ion-button size="small" (click)="cargarIncidencias()">Reintentar</ion-button>
+    </div>
+
+    <!-- ── Resultados ──────────────────────────────────── -->
+    <ng-container *ngIf="!cargando && !error">
+
+      <p class="results-count">
+        <strong>{{ incidenciasFiltradas.length }}</strong> resultado(s) encontrados
+      </p>
+
+      <!-- Cards de incidencias -->
+      <div class="inc-card" *ngFor="let inc of incidenciasFiltradas"
+        [routerLink]="['/incidencia-detalle', inc.id]">
+
+        <!-- Barra de prioridad lateral -->
+        <div class="inc-card-bar"
+          [ngClass]="'bar-' + inc.prioridad">
+        </div>
+
+        <div class="inc-card-content">
+          <!-- Cabecera -->
+          <div class="inc-card-top">
+            <div class="inc-card-meta">
+              <span class="inc-card-code">{{ inc.codigo }}</span>
+              <h2 class="inc-card-title">{{ inc.tipo }}</h2>
             </div>
-
-            <ion-badge [ngClass]="obtenerClasePrioridad(incidencia.prioridad)">
-              {{ incidencia.prioridad }}
-            </ion-badge>
+            <span class="badge-prior" [ngClass]="'prior-' + inc.prioridad">
+              {{ inc.prioridad }}
+            </span>
           </div>
 
-          <p class="descripcion">
-            {{ incidencia.descripcion }}
-          </p>
+          <!-- Descripción -->
+          <p class="inc-card-desc">{{ inc.descripcion }}</p>
 
-          <ion-list lines="none" class="datos-incidencia">
-            <ion-item>
-              <ion-icon name="location-outline" slot="start" color="medium"></ion-icon>
-              <ion-label>
-                <h3>Dirección</h3>
-                <p>{{ incidencia.dirreccion || 'No registrada' }}</p>
-              </ion-label>
-            </ion-item>
-
-            <ion-item>
-              <ion-icon name="map-outline" slot="start" color="medium"></ion-icon>
-              <ion-label>
-                <h3>Sector</h3>
-                <p>{{ incidencia.sector || 'No registrado' }}</p>
-              </ion-label>
-            </ion-item>
-
-            <ion-item>
-              <ion-icon name="calendar-outline" slot="start" color="medium"></ion-icon>
-              <ion-label>
-                <h3>Fecha</h3>
-                <p>{{ incidencia.fecha | date:'dd/MM/yyyy' }}</p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-
-          <div class="incidencia-inferior">
-            <ion-badge [ngClass]="obtenerClaseEstado(incidencia.estado)">
-              {{ incidencia.estado }}
-            </ion-badge>
-
-            <ion-button
-              fill="clear"
-              size="small"
-              [routerLink]="['/incidencia-detalle', incidencia.id]">
-              Ver detalle
-              <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-            </ion-button>
+          <!-- Datos clave -->
+          <div class="inc-card-details">
+            <div class="inc-detail-item">
+              <ion-icon name="location-outline"></ion-icon>
+              <span>{{ inc.dirreccion || 'Sin dirección' }}</span>
+            </div>
+            <div class="inc-detail-item">
+              <ion-icon name="map-outline"></ion-icon>
+              <span>{{ inc.sector || 'Sin sector' }}</span>
+            </div>
+            <div class="inc-detail-item">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span>{{ inc.fecha | date:'dd/MM/yyyy' }}</span>
+            </div>
           </div>
-        </ion-card-content>
-      </ion-card>
+
+          <!-- Pie de card -->
+          <div class="inc-card-footer">
+            <span class="badge-status"
+              [ngClass]="{
+                'status-pending':  inc.estado === 'pendiente',
+                'status-progress': inc.estado === 'en progreso',
+                'status-resolved': inc.estado === 'resuelta'
+              }">
+              <span class="status-dot"></span>
+              {{ inc.estado }}
+            </span>
+            <span class="inc-card-action">
+              Ver detalle <ion-icon name="chevron-forward-outline"></ion-icon>
+            </span>
+          </div>
+        </div>
+      </div>
 
       <!-- Sin resultados -->
-      <ion-card *ngIf="incidenciasFiltradas.length === 0" class="sin-resultados">
-        <ion-card-content>
-          <ion-icon name="search-outline" size="large" color="medium"></ion-icon>
-          <h2>No se encontraron incidencias</h2>
-          <p>Prueba con otra búsqueda o modifica los filtros.</p>
-          <ion-button fill="outline" (click)="limpiarFiltros()">
-            Limpiar filtros
-          </ion-button>
-        </ion-card-content>
-      </ion-card>
+      <div class="empty-state" *ngIf="incidenciasFiltradas.length === 0">
+        <ion-icon name="search-outline"></ion-icon>
+        <h3>Sin resultados</h3>
+        <p>Prueba con otra búsqueda o modifica los filtros.</p>
+        <ion-button fill="outline" size="small" (click)="limpiarFiltros()">
+          Limpiar filtros
+        </ion-button>
+      </div>
 
       <!-- Paginación -->
-      <ion-card class="card-paginacion">
-        <ion-card-content>
-          <ion-button
-            fill="outline"
-            [disabled]="paginaActual === 1"
-            (click)="cambiarPagina(-1)">
-            <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
-            Anterior
-          </ion-button>
+      <div class="pagination-bar">
+        <button class="pag-btn"
+          [disabled]="paginaActual === 1"
+          (click)="cambiarPagina(-1)">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+          Anterior
+        </button>
 
-          <ion-text>
-            Página {{ paginaActual }}
-          </ion-text>
+        <span class="pag-info">Página <strong>{{ paginaActual }}</strong></span>
 
-          <ion-button
-            fill="outline"
-            [disabled]="!hayPaginaSiguiente"
-            (click)="cambiarPagina(1)">
-            Siguiente
-            <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-          </ion-button>
-        </ion-card-content>
-      </ion-card>
+        <button class="pag-btn"
+          [disabled]="!hayPaginaSiguiente"
+          (click)="cambiarPagina(1)">
+          Siguiente
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+
     </ng-container>
-
   </div>
 </ion-content>

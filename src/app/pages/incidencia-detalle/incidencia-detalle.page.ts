@@ -13,8 +13,11 @@ import { timeout } from 'rxjs';
 
 import {
   AlertController,
+  IonBackButton,
+  IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonTitle,
   IonToolbar,
   IonSpinner,
@@ -48,8 +51,11 @@ import {
   imports: [
     CommonModule,
     FormsModule,
+    IonBackButton,
+    IonButtons,
     IonContent,
     IonHeader,
+    IonIcon,
     IonTitle,
     IonToolbar,
     IonSpinner,
@@ -336,5 +342,13 @@ export class IncidenciaDetallePage implements OnInit {
   // Volver a la lista de incidencias.
   volver(): void {
     this.router.navigate(['/incidencias']);
+  }
+
+  // Indica si un estado ya fue superado (para el timeline visual).
+  isEstadoPasado(estado: EstadoIncidencia): boolean {
+    const orden: EstadoIncidencia[] = ['pendiente', 'en progreso', 'resuelta'];
+    const idxActual = orden.indexOf(this.incidencia?.estado as EstadoIncidencia);
+    const idxEstado = orden.indexOf(estado);
+    return idxActual > idxEstado;
   }
 }

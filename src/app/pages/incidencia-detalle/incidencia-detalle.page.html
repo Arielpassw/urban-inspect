@@ -1,217 +1,213 @@
 
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/incidencias" text="" color="primary"></ion-back-button>
+    </ion-buttons>
     <ion-title>Detalle de incidencia</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="detalle-content">
 
-  <!-- Indicador de carga -->
-  <div *ngIf="cargando" class="ion-text-center">
+  <!-- ── Cargando ──────────────────────────────────────── -->
+  <div class="state-center" *ngIf="cargando">
     <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando información...</p>
+    <p>Cargando información…</p>
   </div>
 
-  <!-- Error al cargar la incidencia -->
-  <div *ngIf="!cargando && error" class="ion-text-center">
-    <ion-text color="danger">
-      <p>{{ error }}</p>
-    </ion-text>
-
-    <ion-button expand="block" (click)="volver()">
-      Volver a incidencias
-    </ion-button>
+  <!-- ── Error ─────────────────────────────────────────── -->
+  <div class="state-error-box" *ngIf="!cargando && error">
+    <ion-icon name="cloud-offline-outline"></ion-icon>
+    <p>{{ error }}</p>
+    <ion-button size="small" (click)="volver()">Volver</ion-button>
   </div>
 
-  <!-- Información de la incidencia -->
-  <div *ngIf="!cargando && !error && incidencia">
+  <!-- ── Contenido ─────────────────────────────────────── -->
+  <div class="detalle-container fade-in" *ngIf="!cargando && !error && incidencia">
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-          {{ incidencia.codigo }}
-        </ion-card-title>
-
-        <ion-card-subtitle>
-          {{ incidencia.tipo | titlecase }}
-        </ion-card-subtitle>
-      </ion-card-header>
-
-      <ion-card-content>
-        <p>
-          <strong>Descripción:</strong>
-          {{ incidencia.descripcion }}
-        </p>
-
-        <p>
-          <strong>Dirección:</strong>
-          {{ incidencia.dirreccion || 'No registrada' }}
-        </p>
-
-        <p>
-          <strong>Sector:</strong>
-          {{ incidencia.sector || 'No registrado' }}
-        </p>
-
-        <p>
-          <strong>Prioridad:</strong>
-          {{ incidencia.prioridad | titlecase }}
-        </p>
-
-        <p>
-          <strong>Estado actual:</strong>
+    <!-- Hero de la incidencia -->
+    <div class="detalle-hero" [ngClass]="'hero-' + incidencia.prioridad">
+      <div class="detalle-hero-top">
+        <span class="detalle-code">{{ incidencia.codigo }}</span>
+        <span class="badge-prior" [ngClass]="'prior-' + incidencia.prioridad">
+          {{ incidencia.prioridad }}
+        </span>
+      </div>
+      <h1 class="detalle-type">{{ incidencia.tipo | titlecase }}</h1>
+      <div class="detalle-status-row">
+        <span class="badge-status-hero"
+          [ngClass]="{
+            'status-pending':  incidencia.estado === 'pendiente',
+            'status-progress': incidencia.estado === 'en progreso',
+            'status-resolved': incidencia.estado === 'resuelta'
+          }">
+          <span class="status-dot"></span>
           {{ incidencia.estado | titlecase }}
-        </p>
+        </span>
+      </div>
+    </div>
 
-        <p>
-          <strong>Fecha de registro:</strong>
-          {{ incidencia.fecha | date:'dd/MM/yyyy HH:mm' }}
-        </p>
+    <!-- ── Info general ──────────────────────────────── -->
+    <div class="info-card">
+      <h2 class="card-section-title">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        Información general
+      </h2>
 
-        <!-- Coordenadas -->
-        <div
-          *ngIf="incidencia.latitud != null && incidencia.longitud != null">
-
-          <p>
-            <strong>Latitud:</strong>
-            {{ incidencia.latitud }}
-          </p>
-
-          <p>
-            <strong>Longitud:</strong>
-            {{ incidencia.longitud }}
-          </p>
-
-          <ion-button
-            expand="block"
-            fill="outline"
-            (click)="abrirUbicacion()">
-            Ver ubicación en Google Maps
-          </ion-button>
-        </div>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Fotografía -->
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-          Fotografía de la incidencia
-        </ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <div *ngIf="incidencia.fotografia; else sinFotografia">
-          <ion-img
-            [src]="incidencia.fotografia"
-            alt="Fotografía de la incidencia">
-          </ion-img>
+      <div class="info-grid">
+        <div class="info-item">
+          <ion-icon name="location-outline" class="info-icon"></ion-icon>
+          <div>
+            <p class="info-label">Dirección</p>
+            <p class="info-value">{{ incidencia.dirreccion || 'No registrada' }}</p>
+          </div>
         </div>
 
-        <ng-template #sinFotografia>
-          <ion-text color="medium">
-            <p>Esta incidencia no tiene una fotografía registrada.</p>
-          </ion-text>
-        </ng-template>
-      </ion-card-content>
-    </ion-card>
+        <div class="info-item">
+          <ion-icon name="map-outline" class="info-icon"></ion-icon>
+          <div>
+            <p class="info-label">Sector</p>
+            <p class="info-value">{{ incidencia.sector || 'No registrado' }}</p>
+          </div>
+        </div>
 
-    <!-- Seguimiento -->
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-          Seguimiento de la incidencia
-        </ion-card-title>
+        <div class="info-item">
+          <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+          <div>
+            <p class="info-label">Fecha de registro</p>
+            <p class="info-value">{{ incidencia.fecha | date:'dd/MM/yyyy HH:mm' }}</p>
+          </div>
+        </div>
 
-        <ion-card-subtitle>
-          Actualiza el estado y registra las observaciones.
-        </ion-card-subtitle>
-      </ion-card-header>
+        <div class="info-item" *ngIf="incidencia.latitud != null && incidencia.longitud != null">
+          <ion-icon name="navigate-outline" class="info-icon"></ion-icon>
+          <div>
+            <p class="info-label">Coordenadas</p>
+            <p class="info-value">{{ incidencia.latitud }}, {{ incidencia.longitud }}</p>
+          </div>
+        </div>
+      </div>
 
-      <ion-card-content>
+      <div class="desc-box">
+        <p class="desc-label">Descripción del problema</p>
+        <p class="desc-text">{{ incidencia.descripcion }}</p>
+      </div>
 
-        <!-- Selector de estado -->
-        <ion-item>
-          <ion-label position="stacked">
-            Estado de la incidencia
-          </ion-label>
+      <ion-button
+        *ngIf="incidencia.latitud != null && incidencia.longitud != null"
+        expand="block"
+        fill="outline"
+        color="primary"
+        class="btn-maps"
+        (click)="abrirUbicacion()">
+        <ion-icon name="map-outline" slot="start"></ion-icon>
+        Ver en Google Maps
+      </ion-button>
+    </div>
 
+    <!-- ── Fotografía ─────────────────────────────────── -->
+    <div class="info-card">
+      <h2 class="card-section-title">
+        <ion-icon name="camera-outline"></ion-icon>
+        Fotografía
+      </h2>
+
+      <div class="photo-frame" *ngIf="incidencia.fotografia; else sinFoto">
+        <ion-img [src]="incidencia.fotografia" alt="Fotografía de la incidencia"></ion-img>
+      </div>
+      <ng-template #sinFoto>
+        <div class="photo-empty">
+          <ion-icon name="image-outline"></ion-icon>
+          <p>Sin fotografía registrada</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- ── Seguimiento ────────────────────────────────── -->
+    <div class="info-card">
+      <h2 class="card-section-title">
+        <ion-icon name="git-branch-outline"></ion-icon>
+        Actualizar seguimiento
+      </h2>
+      <p class="card-section-sub">Cambia el estado y registra observaciones del trabajo realizado.</p>
+
+      <!-- Timeline de estados -->
+      <div class="timeline">
+        <div class="timeline-step" [class.step-done]="isEstadoPasado('pendiente')" [class.step-active]="incidencia.estado === 'pendiente'">
+          <div class="step-dot"></div>
+          <div class="step-label">Pendiente</div>
+        </div>
+        <div class="timeline-connector"></div>
+        <div class="timeline-step" [class.step-done]="isEstadoPasado('en progreso')" [class.step-active]="incidencia.estado === 'en progreso'">
+          <div class="step-dot"></div>
+          <div class="step-label">En progreso</div>
+        </div>
+        <div class="timeline-connector"></div>
+        <div class="timeline-step" [class.step-done]="incidencia.estado === 'resuelta'" [class.step-active]="incidencia.estado === 'resuelta'">
+          <div class="step-dot"></div>
+          <div class="step-label">Resuelta</div>
+        </div>
+      </div>
+
+      <!-- Selector estado -->
+      <div class="form-field">
+        <label class="field-label">Nuevo estado</label>
+        <ion-item class="field-item" lines="none">
           <ion-select
             [(ngModel)]="estadoSeleccionado"
             interface="popover"
             placeholder="Selecciona un estado"
             [disabled]="guardando">
-
-            <ion-select-option
-              *ngFor="let estado of estadosPermitidos"
-              [value]="estado">
+            <ion-select-option *ngFor="let estado of estadosPermitidos" [value]="estado">
               {{ estado | titlecase }}
             </ion-select-option>
-
           </ion-select>
         </ion-item>
+      </div>
 
-        <!-- Observación -->
-        <ion-item class="ion-margin-top">
-          <ion-label position="stacked">
-            Observación
-          </ion-label>
-
+      <!-- Observación -->
+      <div class="form-field">
+        <label class="field-label">Observación</label>
+        <ion-item class="field-item field-textarea" lines="none">
           <ion-textarea
             [(ngModel)]="observacion"
-            placeholder="Describe las acciones realizadas..."
+            placeholder="Describe las acciones realizadas…"
             [autoGrow]="true"
             [rows]="4"
             [disabled]="guardando">
           </ion-textarea>
         </ion-item>
+        <p class="field-hint">Para marcar como resuelta, debes registrar una observación.</p>
+      </div>
 
-        <ion-text color="medium">
-          <p>
-            Para marcar una incidencia como resuelta,
-            debes registrar una observación.
-          </p>
-        </ion-text>
+      <!-- Guardar -->
+      <ion-button
+        expand="block"
+        class="btn-save"
+        (click)="guardarCambios()"
+        [disabled]="guardando">
+        <ion-spinner *ngIf="guardando" name="crescent" slot="start"></ion-spinner>
+        <ion-icon *ngIf="!guardando" name="save-outline" slot="start"></ion-icon>
+        {{ guardando ? 'Guardando…' : 'Guardar cambios' }}
+      </ion-button>
 
-        <!-- Guardar cambios -->
-        <ion-button
-          expand="block"
-          class="ion-margin-top"
-          (click)="guardarCambios()"
-          [disabled]="guardando">
+      <!-- Mensajes -->
+      <div class="feedback-success" *ngIf="mensaje">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        {{ mensaje }}
+      </div>
+      <div class="feedback-error" *ngIf="error">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        {{ error }}
+      </div>
+    </div>
 
-          <ion-spinner
-            *ngIf="guardando"
-            name="crescent">
-          </ion-spinner>
-
-          <span *ngIf="!guardando">Guardar cambios</span>
-          <span *ngIf="guardando">Guardando...</span>
-
-        </ion-button>
-
-        <!-- Mensaje de éxito -->
-        <ion-text color="success" *ngIf="mensaje">
-          <p>{{ mensaje }}</p>
-        </ion-text>
-
-        <!-- Mensaje de error -->
-        <ion-text color="danger" *ngIf="error">
-          <p>{{ error }}</p>
-        </ion-text>
-
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Regresar a la lista -->
-    <ion-button
-      expand="block"
-      fill="outline"
-      (click)="volver()">
+    <!-- Volver -->
+    <ion-button expand="block" fill="outline" color="medium" (click)="volver()" class="btn-back">
+      <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
       Volver a incidencias
     </ion-button>
 
   </div>
-
 </ion-content>

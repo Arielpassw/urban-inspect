@@ -12,6 +12,8 @@ import { RouterModule } from '@angular/router';
 import {
   AlertController,
   ToastController,
+  IonBackButton,
+  IonButtons,
   IonContent,
   IonHeader,
   IonTitle,
@@ -46,6 +48,8 @@ import { Incidencia } from '../../models/incidencia.model';
     CommonModule,
     FormsModule,
     RouterModule,
+    IonBackButton,
+    IonButtons,
     IonContent,
     IonHeader,
     IonTitle,

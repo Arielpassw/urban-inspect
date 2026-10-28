@@ -3,6 +3,8 @@ import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
+  IonBackButton,
+  IonButtons,
   IonContent,
   IonHeader,
   IonTitle,
@@ -38,6 +40,8 @@ import { Incidencia } from '../../models/incidencia.model';
   styleUrls: ['./incidencias.page.scss'],
   standalone: true,
   imports: [
+    IonBackButton,
+    IonButtons,
     IonContent,
     IonHeader,
     IonTitle,

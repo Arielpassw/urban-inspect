@@ -1,284 +1,210 @@
 
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Seguimiento</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard" text="" color="primary"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis incidencias</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="pagina-seguimiento">
+<ion-content class="seg-content">
+  <div class="seg-container">
 
-    <div class="encabezado">
-      <h1>Mis incidencias</h1>
-      <p>
-        Selecciona las incidencias que deseas consultar
-        y mantener bajo seguimiento.
-      </p>
+    <!-- ── Encabezado ──────────────────────────────────── -->
+    <div class="seg-header">
+      <div class="seg-header-icon">
+        <ion-icon name="bookmark"></ion-icon>
+      </div>
+      <div>
+        <h1 class="seg-title">Mis incidencias</h1>
+        <p class="seg-subtitle">Selecciona y monitorea los reportes urbanos que te interesan.</p>
+      </div>
     </div>
 
-    <!-- Selector de incidencias -->
-    <ion-card class="card-busqueda">
-      <ion-card-header>
-        <ion-card-title>Agregar incidencia</ion-card-title>
-        <ion-card-subtitle>
-          Selecciona una incidencia de la lista disponible.
-        </ion-card-subtitle>
-      </ion-card-header>
+    <!-- ── Selector / Agregar ─────────────────────────── -->
+    <div class="add-section">
+      <h2 class="add-title">
+        <ion-icon name="add-circle-outline"></ion-icon>
+        Agregar al seguimiento
+      </h2>
+      <p class="add-subtitle">Selecciona una incidencia de la lista disponible en el sistema.</p>
 
-      <ion-card-content>
-        <ion-item>
+      <div class="form-field">
+        <label class="field-label">Incidencia disponible</label>
+        <ion-item class="field-item" lines="none">
           <ion-select
-            label="Incidencia disponible"
-            labelPlacement="floating"
+            label=""
             placeholder="Selecciona una incidencia"
             [(ngModel)]="codigoSeleccionado"
             interface="action-sheet">
-
             <ion-select-option
-              *ngFor="let incidencia of incidenciasDisponibles"
-              [value]="incidencia.codigo">
-
-              {{ incidencia.codigo }} — {{ incidencia.tipo }}
-              ({{ incidencia.sector }})
-
+              *ngFor="let inc of incidenciasDisponibles"
+              [value]="inc.codigo">
+              {{ inc.codigo }} — {{ inc.tipo }} ({{ inc.sector }})
             </ion-select-option>
-
           </ion-select>
         </ion-item>
-
-        <!-- Vista previa -->
-        <ion-card
-          class="vista-previa"
-          *ngIf="codigoSeleccionado">
-
-          <ion-card-content>
-            <ng-container
-              *ngFor="let incidencia of incidenciasDisponibles">
-
-              <div
-                *ngIf="incidencia.codigo === codigoSeleccionado">
-
-                <ion-badge
-                  [ngClass]="obtenerClaseEstado(incidencia.estado)">
-                  {{ incidencia.estado }}
-                </ion-badge>
-
-                <h3>{{ incidencia.tipo }}</h3>
-
-                <p>{{ incidencia.descripcion }}</p>
-
-                <p>
-                  <ion-icon name="location-outline"></ion-icon>
-                  {{ incidencia.dirreccion || 'Sin dirección registrada' }}
-                </p>
-
-                <p>
-                  Sector: {{ incidencia.sector || 'No registrado' }}
-                </p>
-
-                <p>
-                  Prioridad: {{ incidencia.prioridad }}
-                </p>
-
-              </div>
-            </ng-container>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-button
-          expand="block"
-          class="boton-agregar"
-          [disabled]="!codigoSeleccionado"
-          (click)="agregarSeguimiento()">
-
-          <ion-icon name="bookmark-outline" slot="start"></ion-icon>
-          Agregar a seguimiento
-
-        </ion-button>
-
-        <ion-text
-          color="medium"
-          *ngIf="!cargando && incidenciasDisponibles.length === 0">
-
-          <p>
-            No hay incidencias disponibles para agregar.
-            Puedes consultar las que ya guardaste abajo.
-          </p>
-
-        </ion-text>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Cargando -->
-    <div
-      class="estado-carga"
-      *ngIf="cargando || inicializando">
-
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Cargando incidencias...</p>
-    </div>
-
-    <!-- Error -->
-    <ion-card color="danger" *ngIf="error && !cargando">
-      <ion-card-content>
-        <p>{{ error }}</p>
-
-        <ion-button
-          expand="block"
-          fill="outline"
-          color="light"
-          (click)="cargarIncidencias()">
-
-          Reintentar
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Seguimiento guardado -->
-    <ng-container
-      *ngIf="!cargando && !inicializando && !error">
-
-      <div class="resumen">
-        <ion-icon name="bookmark" color="primary"></ion-icon>
-
-        <ion-text>
-          <strong>{{ codigosSeguimiento.length }}</strong>
-          incidencia(s) guardada(s) en seguimiento
-        </ion-text>
       </div>
 
-      <!-- Incidencias guardadas -->
-      <ion-card
-        class="card-incidencia"
-        *ngFor="let incidencia of incidenciasEnSeguimiento">
-
-        <ion-card-content>
-          <div class="incidencia-cabecera">
-            <div>
-              <ion-text color="primary">
-                <strong>{{ incidencia.codigo }}</strong>
-              </ion-text>
-
-              <h2>{{ incidencia.tipo }}</h2>
+      <!-- Vista previa rápida -->
+      <div class="preview-card" *ngIf="codigoSeleccionado">
+        <ng-container *ngFor="let inc of incidenciasDisponibles">
+          <div *ngIf="inc.codigo === codigoSeleccionado">
+            <div class="preview-top">
+              <div>
+                <p class="preview-code">{{ inc.codigo }}</p>
+                <h3 class="preview-type">{{ inc.tipo }}</h3>
+              </div>
+              <span class="badge-status"
+                [ngClass]="{
+                  'status-pending':  inc.estado === 'pendiente',
+                  'status-progress': inc.estado === 'en progreso',
+                  'status-resolved': inc.estado === 'resuelta'
+                }">
+                <span class="status-dot"></span>
+                {{ inc.estado }}
+              </span>
             </div>
+            <p class="preview-desc">{{ inc.descripcion }}</p>
+            <div class="preview-meta">
+              <span>
+                <ion-icon name="location-outline"></ion-icon>
+                {{ inc.dirreccion || 'Sin dirección' }}
+              </span>
+              <span>
+                <ion-icon name="map-outline"></ion-icon>
+                {{ inc.sector || 'Sin sector' }}
+              </span>
+              <span class="badge-prior" [ngClass]="'prior-' + inc.prioridad">
+                {{ inc.prioridad }}
+              </span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
 
-            <ion-badge
-              [ngClass]="obtenerClaseEstado(incidencia.estado)">
+      <ion-button
+        expand="block"
+        color="primary"
+        class="btn-add"
+        [disabled]="!codigoSeleccionado"
+        (click)="agregarSeguimiento()">
+        <ion-icon name="bookmark-outline" slot="start"></ion-icon>
+        Agregar a seguimiento
+      </ion-button>
 
-              {{ incidencia.estado }}
-            </ion-badge>
+      <p class="no-avail" *ngIf="!cargando && incidenciasDisponibles.length === 0">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        No hay más incidencias disponibles para agregar.
+      </p>
+    </div>
+
+    <!-- ── Cargando ────────────────────────────────────── -->
+    <div class="state-center" *ngIf="cargando || inicializando">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando incidencias…</p>
+    </div>
+
+    <!-- ── Error ───────────────────────────────────────── -->
+    <div class="state-error-box" *ngIf="error && !cargando">
+      <ion-icon name="cloud-offline-outline"></ion-icon>
+      <p>{{ error }}</p>
+      <ion-button size="small" (click)="cargarIncidencias()">Reintentar</ion-button>
+    </div>
+
+    <!-- ── Lista guardada ──────────────────────────────── -->
+    <ng-container *ngIf="!cargando && !inicializando && !error">
+
+      <!-- Contador -->
+      <div class="saved-header">
+        <ion-icon name="bookmark" color="primary"></ion-icon>
+        <span>
+          <strong>{{ codigosSeguimiento.length }}</strong>
+          incidencia(s) guardada(s) en seguimiento
+        </span>
+      </div>
+
+      <!-- Cards guardadas -->
+      <div class="seg-card" *ngFor="let inc of incidenciasEnSeguimiento">
+        <div class="seg-card-bar" [ngClass]="'bar-' + inc.prioridad"></div>
+        <div class="seg-card-body">
+          <div class="seg-card-top">
+            <div>
+              <p class="seg-code">{{ inc.codigo }}</p>
+              <h2 class="seg-type">{{ inc.tipo }}</h2>
+            </div>
+            <span class="badge-status"
+              [ngClass]="{
+                'status-pending':  inc.estado === 'pendiente',
+                'status-progress': inc.estado === 'en progreso',
+                'status-resolved': inc.estado === 'resuelta'
+              }">
+              <span class="status-dot"></span>
+              {{ inc.estado }}
+            </span>
           </div>
 
-          <p class="descripcion">
-            {{ incidencia.descripcion }}
-          </p>
+          <p class="seg-desc">{{ inc.descripcion }}</p>
 
-          <ion-list lines="none">
-            <ion-item>
-              <ion-icon
-                name="location-outline"
-                slot="start"
-                color="medium">
-              </ion-icon>
+          <div class="seg-meta">
+            <span>
+              <ion-icon name="location-outline"></ion-icon>
+              {{ inc.dirreccion || 'Sin dirección' }}
+            </span>
+            <span>
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              Prioridad {{ inc.prioridad }}
+            </span>
+          </div>
 
-              <ion-label>
-                <h3>Ubicación</h3>
-                <p>{{ incidencia.dirreccion || 'Sin dirección registrada' }}</p>
-                <p>{{ incidencia.sector || 'No registrado' }}</p>
-              </ion-label>
-            </ion-item>
-
-            <ion-item>
-              <ion-icon
-                name="alert-circle-outline"
-                slot="start"
-                color="medium">
-              </ion-icon>
-
-              <ion-label>
-                <h3>Prioridad</h3>
-                <p>{{ incidencia.prioridad }}</p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-
-          <div class="acciones">
+          <div class="seg-actions">
             <ion-button
-              fill="clear"
-              [routerLink]="[
-                '/incidencia-detalle',
-                incidencia.id
-              ]">
-
+              fill="outline"
+              color="primary"
+              size="small"
+              [routerLink]="['/incidencia-detalle', inc.id]">
+              <ion-icon name="eye-outline" slot="start"></ion-icon>
               Ver detalle
-              <ion-icon
-                name="chevron-forward-outline"
-                slot="end">
-              </ion-icon>
             </ion-button>
 
             <ion-button
               fill="outline"
               color="danger"
-              (click)="quitarSeguimiento(incidencia)">
-
-              <ion-icon
-                name="bookmark"
-                slot="start">
-              </ion-icon>
-
+              size="small"
+              (click)="quitarSeguimiento(inc)">
+              <ion-icon name="bookmark" slot="start"></ion-icon>
               Quitar
             </ion-button>
           </div>
-        </ion-card-content>
-      </ion-card>
+        </div>
+      </div>
 
-      <!-- Códigos guardados que ya no están en MockAPI -->
-      <ion-card
-        class="card-incidencia"
-        *ngFor="let codigo of codigosNoEncontrados">
-
-        <ion-card-content>
-          <ion-text color="medium">
-            <strong>{{ codigo }}</strong>
-          </ion-text>
-
-          <p>
-            No se encontró esta incidencia en los registros actuales.
-          </p>
-
-          <ion-button
-            fill="outline"
-            color="danger"
-            (click)="quitarCodigoNoEncontrado(codigo)">
-
-            Quitar de seguimiento
-          </ion-button>
-        </ion-card-content>
-      </ion-card>
+      <!-- Códigos no encontrados -->
+      <div class="orphan-card" *ngFor="let codigo of codigosNoEncontrados">
+        <div class="orphan-icon">
+          <ion-icon name="warning-outline"></ion-icon>
+        </div>
+        <div class="orphan-body">
+          <p class="orphan-code">{{ codigo }}</p>
+          <p class="orphan-text">No se encontró esta incidencia en los registros actuales.</p>
+        </div>
+        <ion-button
+          fill="clear"
+          color="danger"
+          size="small"
+          (click)="quitarCodigoNoEncontrado(codigo)">
+          <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
 
       <!-- Lista vacía -->
-      <ion-card
-        class="vacio"
-        *ngIf="codigosSeguimiento.length === 0">
-
-        <ion-card-content>
-          <ion-icon
-            name="bookmark-outline"
-            size="large"
-            color="medium">
-          </ion-icon>
-
-          <h2>Aún no tienes incidencias guardadas</h2>
-
-          <p>
-            Selecciona una incidencia de la lista superior
-            para comenzar tu seguimiento.
-          </p>
-        </ion-card-content>
-      </ion-card>
+      <div class="empty-state" *ngIf="codigosSeguimiento.length === 0">
+        <ion-icon name="bookmark-outline"></ion-icon>
+        <h3>Ninguna incidencia guardada</h3>
+        <p>Selecciona una incidencia arriba para comenzar tu seguimiento personal.</p>
+      </div>
 
     </ng-container>
-
   </div>
 </ion-content>
