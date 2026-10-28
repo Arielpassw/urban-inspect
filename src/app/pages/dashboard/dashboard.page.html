@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>UrbanInspect | Dashboard</ion-title>
@@ -123,41 +122,44 @@
             </tr>
           </thead>
 
+
           <tbody>
-            <tr *ngFor="let incidencia of incidencias">
+            <!-- Mostrar las incidencias registradas -->
+            <tr *ngFor="let incidencia of incidenciasRecientes" (click)="abrirIncidencia(incidencia)"
+              class="clickable-row" title="Presiona para ver el detalle">
               <td class="code-cell">
                 {{ incidencia.codigo }}
               </td>
+
               <td>{{ incidencia.tipo }}</td>
+
               <td>{{ incidencia.sector }}</td>
+
               <td>
-                <span
-                  class="priority-badge"
-                  [ngClass]="'priority-' + incidencia.prioridad"
-                >
+                <span class="priority-badge" [ngClass]="'priority-' + incidencia.prioridad">
                   {{ incidencia.prioridad }}
                 </span>
               </td>
+
               <td>
-                <span
-                  class="status-badge"
-                  [ngClass]="{
-                    'status-pending': incidencia.estado === 'pendiente',
-                    'status-progress': incidencia.estado === 'en progreso',
-                    'status-resolved': incidencia.estado === 'resuelta'
-                  }"
-                >
+                <span class="status-badge" [ngClass]="{
+          'status-pending': incidencia.estado === 'pendiente',
+          'status-progress': incidencia.estado === 'en progreso',
+          'status-resolved': incidencia.estado === 'resuelta'
+        }">
                   {{ incidencia.estado }}
                 </span>
               </td>
             </tr>
 
-            <tr *ngIf="incidencias.length === 0">
+            <!-- Mostrar el mensaje únicamente cuando no hay incidencias -->
+            <tr *ngIf="incidenciasRecientes.length === 0">
               <td colspan="5" class="empty-state">
                 No hay incidencias para mostrar.
               </td>
             </tr>
           </tbody>
+
         </table>
       </div>
     </section>

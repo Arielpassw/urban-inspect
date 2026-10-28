@@ -119,7 +119,7 @@ export class IncidenciasPage implements OnInit {
         incidencia.codigo?.toLowerCase().includes(texto) ||
         incidencia.tipo?.toLowerCase().includes(texto) ||
         incidencia.sector?.toLowerCase().includes(texto) ||
-        incidencia.direccion?.toLowerCase().includes(texto);
+        incidencia.dirreccion?.toLowerCase().includes(texto);
 
       const coincideEstado =
         !this.filtroEstado || incidencia.estado === this.filtroEstado;

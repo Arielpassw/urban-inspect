@@ -1,7 +1,7 @@
 
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { Incidencia } from '../models/incidencia.model';
@@ -41,13 +41,29 @@ export class IncidenciasService {
     }
 
     // Actualizar una incidencia
+    // Actualizar una incidencia
     actualizarIncidencia(
         id: string,
         cambios: Partial<Incidencia>
     ): Observable<Incidencia> {
-        return this.http.patch<Incidencia>(
-            `${this.apiUrl}/${id}`,
-            cambios
+        return this.http.get<Incidencia>(
+            `${this.apiUrl}/${id}`
+        ).pipe(
+            // Obtener los datos actuales antes de actualizar
+            switchMap((actual) => {
+                const incidenciaActualizada: Incidencia = {
+                    ...actual,
+                    ...cambios,
+                    id: actual.id,
+                    dirreccion: cambios.dirreccion ?? actual.dirreccion,
+                    fotografia: cambios.fotografia ?? actual.fotografia
+                };
+
+                return this.http.put<Incidencia>(
+                    `${this.apiUrl}/${id}`,
+                    incidenciaActualizada
+                );
+            })
         );
     }
 

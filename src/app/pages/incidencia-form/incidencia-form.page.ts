@@ -95,7 +95,7 @@ export class IncidenciaFormPage {
 
   tipo = '';
   descripcion = '';
-  direccion = '';
+  dirreccion = '';
   sector = '';
   prioridad: PrioridadIncidencia = 'media';
 
@@ -291,7 +291,7 @@ export class IncidenciaFormPage {
       return false;
     }
 
-    if (!this.direccion.trim()) {
+    if (!this.dirreccion.trim()) {
       void this.mostrarAlerta(
         'Campo obligatorio',
         'Ingresa la dirección de la incidencia.',
@@ -396,7 +396,7 @@ export class IncidenciaFormPage {
         codigo: `INC-${Date.now()}`,
         tipo: this.tipo,
         descripcion: this.descripcion.trim(),
-        direccion: this.direccion.trim(),
+        dirreccion: this.dirreccion.trim(),
         sector: this.sector.trim(),
         prioridad: this.prioridad,
         estado: 'pendiente',
@@ -422,9 +422,14 @@ export class IncidenciaFormPage {
 
       await loading.dismiss();
 
+      const detalle =
+        error instanceof Error
+          ? error.message
+          : 'Error desconocido. Revisa la consola.';
+
       await this.mostrarAlerta(
         'No se pudo guardar',
-        'Ocurrió un error al guardar la incidencia o subir la fotografía. Revisa tu conexión e inténtalo nuevamente.',
+        detalle
       );
     } finally {
       this.guardando = false;

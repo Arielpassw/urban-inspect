@@ -11,7 +11,7 @@ export interface Incidencia {
   codigo: string;
   tipo: string;
   descripcion: string;
-  direccion: string;
+  dirreccion: string;
   sector: string;
   prioridad: PrioridadIncidencia;
   estado: EstadoIncidencia;

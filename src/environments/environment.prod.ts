@@ -5,7 +5,7 @@ export const environment = {
   mockApiUrl:
     'https://6ae009908e42963c8d5ec230.mockapi.io/incidencias',
 
-  cloudinaryCloudName: 'dvcxwidi7',
+  cloudinaryCloudName: 'dvcxwidr7',
   cloudinaryUploadPreset: 'urbaninspect_fotos',
 
   climaApiUrl:

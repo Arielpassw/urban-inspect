@@ -1,7 +1,12 @@
 
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import {
   IonContent,
   IonHeader,
@@ -23,12 +28,13 @@ import { Incidencia } from '../../models/incidencia.model';
     IonTitle,
     IonToolbar,
     CommonModule,
-    FormsModule,
+    RouterModule,
   ],
 })
 export class DashboardPage implements OnInit {
   private incidenciasService = inject(IncidenciasService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   incidencias: Incidencia[] = [];
   cargando = false;
@@ -39,15 +45,26 @@ export class DashboardPage implements OnInit {
   }
 
   cargarIncidencias(): void {
+    if (this.cargando) {
+      return;
+    }
+
     this.cargando = true;
     this.error = '';
     this.cdr.detectChanges();
 
-    this.incidenciasService.obtenerIncidencias(1, 5).subscribe({
+    // Solicita los registros para calcular estadísticas globales.
+    this.incidenciasService.obtenerIncidencias(1, 100).subscribe({
       next: (datos) => {
         console.log('Incidencias recibidas:', datos);
 
-        this.incidencias = datos;
+        // Ordenar de más reciente a más antigua.
+        this.incidencias = [...datos].sort(
+          (a, b) =>
+            new Date(b.fecha).getTime() -
+            new Date(a.fecha).getTime()
+        );
+
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -56,6 +73,7 @@ export class DashboardPage implements OnInit {
 
         this.error =
           'No se pudieron cargar las incidencias. Intenta nuevamente.';
+
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -68,19 +86,34 @@ export class DashboardPage implements OnInit {
 
   get pendientes(): number {
     return this.incidencias.filter(
-      (i) => i.estado === 'pendiente'
+      (i) => i.estado?.toLowerCase() === 'pendiente'
     ).length;
   }
 
   get enProgreso(): number {
     return this.incidencias.filter(
-      (i) => i.estado === 'en progreso'
+      (i) => i.estado?.toLowerCase() === 'en progreso'
     ).length;
   }
 
   get resueltas(): number {
     return this.incidencias.filter(
-      (i) => i.estado === 'resuelta'
+      (i) => i.estado?.toLowerCase() === 'resuelta'
     ).length;
+  }
+
+  get incidenciasRecientes(): Incidencia[] {
+    return this.incidencias.slice(0, 5);
+  }
+
+  abrirIncidencia(incidencia: Incidencia): void {
+    if (!incidencia.id) {
+      return;
+    }
+
+    this.router.navigate([
+      '/incidencia-detalle',
+      incidencia.id,
+    ]);
   }
 }
