@@ -69,6 +69,22 @@ ion-button[color="primary"] {
   --box-shadow: 0 4px 16px rgba(26, 95, 212, 0.35);
 }
 
+ion-button[color="medium"][fill="outline"],
+ion-button[fill="outline"][color="medium"] {
+  --background: #ffffff;
+  --border-color: #94a3b8;
+  --color: #334155;
+  --border-width: 1.5px;
+  --box-shadow: 0 4px 14px rgba(148, 163, 184, 0.15);
+}
+
+ion-back-button {
+  --color: #1a5fd4;
+  --icon-size: 22px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
 ion-button:not([disabled]):hover {
   transform: translateY(-1px);
 }

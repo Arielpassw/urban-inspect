@@ -8,13 +8,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import {
-  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
   IonIcon,
   IonSpinner,
-  IonTitle,
   IonToolbar,
 } from '@ionic/angular';
 
@@ -27,13 +25,11 @@ import { Incidencia } from '../../models/incidencia.model';
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
   imports: [
-    IonButton,
     IonButtons,
     IonContent,
     IonHeader,
     IonIcon,
     IonSpinner,
-    IonTitle,
     IonToolbar,
     CommonModule,
     RouterModule,

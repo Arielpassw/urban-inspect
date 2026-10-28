@@ -397,7 +397,21 @@ ion-button {
 
 // ── Responsive ────────────────────────────────────────────
 @media (max-width: 420px) {
+  .form-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .form-actions {
+    gap: 8px;
+  }
+
   .coords-grid { grid-template-columns: 1fr; }
   .clima-body  { grid-template-columns: 1fr 1fr; }
   .priority-chips { flex-direction: column; }
+
+  ion-button {
+    min-height: 46px;
+    font-size: 14px;
+  }
 }

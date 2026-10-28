@@ -299,7 +299,7 @@ export class SeguimientoPage implements OnInit {
         return 'estado-resuelta';
 
       case 'en proceso':
-      case 'en proceso':
+      case 'en progreso':
         return 'estado-progreso';
       default:
         return '';

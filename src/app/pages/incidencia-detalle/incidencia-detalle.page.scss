@@ -410,5 +410,16 @@
 
 .btn-back {
   --border-radius: 12px;
+  --min-height: 46px;
+  font-weight: 700;
   margin-top: 8px;
+}
+
+@media (max-width: 420px) {
+  .btn-back,
+  .btn-save,
+  .btn-maps {
+    min-height: 46px;
+    font-size: 14px;
+  }
 }

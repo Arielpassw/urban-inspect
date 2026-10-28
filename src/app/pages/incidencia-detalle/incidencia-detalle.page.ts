@@ -21,19 +21,12 @@ import {
   IonTitle,
   IonToolbar,
   IonSpinner,
-  IonText,
   IonButton,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
-  IonCardContent,
   IonImg,
   IonItem,
-  IonLabel,
   IonSelect,
   IonSelectOption,
-  IonTextarea
+  IonTextarea,
 } from '@ionic/angular';
 
 import { IncidenciasService } from '../../services/incidencias.service';
@@ -59,20 +52,13 @@ import {
     IonTitle,
     IonToolbar,
     IonSpinner,
-    IonText,
     IonButton,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    IonCardContent,
     IonImg,
     IonItem,
-    IonLabel,
     IonSelect,
     IonSelectOption,
-    IonTextarea
-  ]
+    IonTextarea,
+  ],
 })
 export class IncidenciaDetallePage implements OnInit {
 
