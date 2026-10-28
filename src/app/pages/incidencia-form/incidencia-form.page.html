@@ -35,6 +35,7 @@
           <ion-item class="campo-item" lines="none">
             <ion-select
               [(ngModel)]="tipo"
+              (ngModelChange)="programarGuardadoBorrador()"
               name="tipo"
               interface="popover"
               placeholder="Selecciona el tipo"
@@ -60,6 +61,7 @@
           <ion-item class="campo-item textarea-item" lines="none">
             <ion-textarea
               [(ngModel)]="descripcion"
+              (ngModelChange)="programarGuardadoBorrador()"
               name="descripcion"
               placeholder="Describe el problema observado..."
               [autoGrow]="true"
@@ -79,6 +81,7 @@
           <ion-item class="campo-item" lines="none">
             <ion-input
               [(ngModel)]="dirreccion"
+              (ngModelChange)="programarGuardadoBorrador()"
               name="direccion"
               placeholder="Ej. Av. Amazonas y Naciones Unidas"
               maxlength="200"
@@ -96,6 +99,7 @@
           <ion-item class="campo-item" lines="none">
             <ion-input
               [(ngModel)]="sector"
+              (ngModelChange)="programarGuardadoBorrador()"
               name="sector"
               placeholder="Ej. La Mariscal"
               maxlength="120"
@@ -113,6 +117,7 @@
           <ion-item class="campo-item" lines="none">
             <ion-select
               [(ngModel)]="prioridad"
+              (ngModelChange)="programarGuardadoBorrador()"
               name="prioridad"
               interface="popover"
               placeholder="Selecciona la prioridad"
@@ -120,17 +125,9 @@
               expandedIcon="chevron-up-outline"
               required
             >
-              <ion-select-option value="baja">
-                Baja
-              </ion-select-option>
-
-              <ion-select-option value="media">
-                Media
-              </ion-select-option>
-
-              <ion-select-option value="alta">
-                Alta
-              </ion-select-option>
+              <ion-select-option value="baja">Baja</ion-select-option>
+              <ion-select-option value="media">Media</ion-select-option>
+              <ion-select-option value="alta">Alta</ion-select-option>
             </ion-select>
           </ion-item>
 
@@ -234,6 +231,7 @@
                 type="number"
                 inputmode="decimal"
                 [(ngModel)]="latitud"
+                (ngModelChange)="coordenadasCambiaron(); programarGuardadoBorrador()"
                 name="latitud"
                 placeholder="-0.1807"
                 min="-90"
@@ -250,6 +248,7 @@
                 type="number"
                 inputmode="decimal"
                 [(ngModel)]="longitud"
+                (ngModelChange)="coordenadasCambiaron(); programarGuardadoBorrador()"
                 name="longitud"
                 placeholder="-78.4678"
                 min="-180"
@@ -344,7 +343,7 @@
         expand="block"
         fill="clear"
         color="medium"
-        routerLink="/incidencias"
+        (click)="salirDelFormulario()"
         [disabled]="guardando"
       >
         Cancelar y volver

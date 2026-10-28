@@ -1,6 +1,6 @@
 
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ChangeDetectorRef, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
@@ -51,6 +51,8 @@ import {
   PrioridadIncidencia,
 } from '../../models/incidencia.model';
 
+import { BorradorIncidenciaService } from '../../services/borrador-incidencia.service';
+
 @Component({
   selector: 'app-incidencia-form',
   standalone: true,
@@ -82,7 +84,7 @@ import {
     IonNote,
   ],
 })
-export class IncidenciaFormPage {
+export class IncidenciaFormPage implements OnInit {
   private readonly incidenciasService = inject(IncidenciasService);
   private readonly cloudinaryService = inject(CloudinaryService);
   private readonly ubicacionService = inject(UbicacionService);
@@ -92,6 +94,11 @@ export class IncidenciaFormPage {
   private readonly toastController = inject(ToastController);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+  private latitudClima: number | null = null;
+  private longitudClima: number | null = null;
+  private borradorService = inject(BorradorIncidenciaService);
+  private borradorInicializado = false;
+  private temporizadorBorrador: ReturnType<typeof setTimeout> | null = null;
 
   tipo = '';
   descripcion = '';
@@ -121,6 +128,169 @@ export class IncidenciaFormPage {
     { valor: 'otro', etiqueta: 'Otro' },
   ];
 
+  // Inicializar el borrador al cargar la página.
+  async ngOnInit(): Promise<void> {
+    await this.recuperarBorrador();
+  }
+
+  // Guardar el borrador al salir de la página.
+  private obtenerDatosBorrador() {
+    return {
+      tipo: this.tipo,
+      descripcion: this.descripcion,
+      dirreccion: this.dirreccion,
+      sector: this.sector,
+      prioridad: this.prioridad,
+      latitud: this.latitud,
+      longitud: this.longitud,
+      tieneFotografia: !!this.fotografiaBlob,
+    };
+  }
+
+  private hayDatosBorrador(): boolean {
+    return !!(
+      this.tipo.trim() ||
+      this.descripcion.trim() ||
+      this.dirreccion.trim() ||
+      this.sector.trim() ||
+      this.fotografiaBlob ||
+      this.latitud !== null ||
+      this.longitud !== null
+    );
+  }
+
+  programarGuardadoBorrador(): void {
+    if (!this.borradorInicializado || this.guardando) {
+      return;
+    }
+
+    if (this.temporizadorBorrador !== null) {
+      clearTimeout(this.temporizadorBorrador);
+    }
+
+    this.temporizadorBorrador = setTimeout(() => {
+      void this.guardarBorrador();
+    }, 500);
+  }
+
+  private async guardarBorrador(): Promise<void> {
+    if (!this.borradorInicializado || this.guardando) {
+      return;
+    }
+
+    try {
+      if (!this.hayDatosBorrador()) {
+        await this.borradorService.eliminar();
+        return;
+      }
+
+      await this.borradorService.guardar(this.obtenerDatosBorrador());
+    } catch (error) {
+      console.error('No se pudo guardar el borrador:', error);
+    }
+  }
+
+  private async recuperarBorrador(): Promise<void> {
+    try {
+      const borrador = await this.borradorService.obtener();
+
+      if (!borrador) {
+        this.borradorInicializado = true;
+        return;
+      }
+
+      const alerta = await this.alertController.create({
+        header: 'Borrador encontrado',
+        message:
+          'Tienes una incidencia sin terminar. ¿Deseas continuar donde la dejaste?',
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: 'Descartar borrador',
+            role: 'destructive',
+            handler: async () => {
+              await this.descartarBorrador();
+            },
+          },
+          {
+            text: 'Continuar borrador',
+            role: 'confirm',
+            handler: async () => {
+              await this.continuarBorrador(borrador);
+            },
+          },
+        ],
+      });
+
+      await alerta.present();
+      const resultado = await alerta.onDidDismiss();
+
+      this.borradorInicializado = true;
+
+      if (resultado.role === 'confirm') {
+        this.programarGuardadoBorrador();
+      }
+    } catch (error) {
+      console.error('No se pudo recuperar el borrador:', error);
+      this.borradorInicializado = true;
+
+      await this.mostrarMensaje(
+        'No se pudo recuperar el borrador guardado.',
+      );
+    }
+  }
+
+  private async continuarBorrador(
+    borrador: import('../../services/borrador-incidencia.service').BorradorIncidencia,
+  ): Promise<void> {
+    this.tipo = borrador.tipo;
+    this.descripcion = borrador.descripcion;
+    this.dirreccion = borrador.dirreccion;
+    this.sector = borrador.sector;
+    this.prioridad = borrador.prioridad;
+    this.latitud = borrador.latitud;
+    this.longitud = borrador.longitud;
+
+    if (borrador.tieneFotografia) {
+      const fotografia = await this.borradorService.obtenerFotografia();
+
+      if (fotografia) {
+        this.fotografiaBlob = fotografia;
+        this.fotografiaVistaPrevia = URL.createObjectURL(fotografia);
+      } else {
+        await this.mostrarMensaje(
+          'No se pudo recuperar la fotografía. Puedes tomar otra.',
+        );
+      }
+    }
+
+    this.cdr.detectChanges();
+  }
+
+  private async descartarBorrador(): Promise<void> {
+    try {
+      await this.borradorService.eliminar();
+
+      this.tipo = '';
+      this.descripcion = '';
+      this.dirreccion = '';
+      this.sector = '';
+      this.prioridad = 'media';
+      this.latitud = null;
+      this.longitud = null;
+      this.fotografiaBlob = null;
+      this.fotografiaVistaPrevia = null;
+      this.clima = null;
+
+      this.cdr.detectChanges();
+      await this.mostrarMensaje('Borrador descartado.');
+    } catch (error) {
+      console.error('No se pudo descartar el borrador:', error);
+      await this.mostrarMensaje('No se pudo eliminar el borrador.');
+    }
+  }
+
+
   async tomarFotografia(): Promise<void> {
     try {
       const foto = await Camera.getPhoto({
@@ -144,6 +314,11 @@ export class IncidenciaFormPage {
       this.fotografiaBlob = await respuesta.blob();
       this.fotografiaVistaPrevia = foto.webPath;
 
+      await this.borradorService.guardar(
+        this.obtenerDatosBorrador(),
+        this.fotografiaBlob,
+      );
+
       await this.mostrarMensaje('Fotografía capturada correctamente.');
     } catch (error) {
       console.error('Error al tomar la fotografía:', error);
@@ -165,6 +340,10 @@ export class IncidenciaFormPage {
   cancelarFotografia(): void {
     this.fotografiaBlob = null;
     this.fotografiaVistaPrevia = null;
+    void this.borradorService.guardar(
+      this.obtenerDatosBorrador(),
+      null,
+    );
     this.cdr.detectChanges();
   }
 
@@ -241,10 +420,16 @@ export class IncidenciaFormPage {
     this.consultandoClima = true;
 
     try {
+      const latitudConsultada = this.latitud;
+      const longitudConsultada = this.longitud;
+
       this.clima = await this.climaService.consultarClima(
-        this.latitud,
-        this.longitud,
+        latitudConsultada,
+        longitudConsultada,
       );
+
+      this.latitudClima = latitudConsultada;
+      this.longitudClima = longitudConsultada;
 
       if (this.clima.advertencia) {
         await this.mostrarAlerta(
@@ -372,6 +557,18 @@ export class IncidenciaFormPage {
       return;
     }
 
+    if (
+      this.latitud !== null &&
+      this.longitud !== null &&
+      (
+        this.clima === null ||
+        this.latitudClima !== this.latitud ||
+        this.longitudClima !== this.longitud
+      )
+    ) {
+      await this.consultarClima();
+    }
+
     this.guardando = true;
 
     const loading = await this.loadingController.create({
@@ -415,6 +612,7 @@ export class IncidenciaFormPage {
       });
 
       await loading.dismiss();
+      await this.borradorService.eliminar();
       await this.mostrarMensaje('Incidencia registrada correctamente.');
       await this.router.navigate(['/incidencias']);
     } catch (error) {
@@ -458,5 +656,23 @@ export class IncidenciaFormPage {
     });
 
     await alerta.present();
+  }
+
+  // Limpiar el clima si las coordenadas cambian.
+  coordenadasCambiaron(): void {
+    this.clima = null;
+    this.latitudClima = null;
+    this.longitudClima = null;
+  }
+
+  // Salir del formulario y guardar el borrador.
+  async salirDelFormulario(): Promise<void> {
+    if (this.temporizadorBorrador !== null) {
+      clearTimeout(this.temporizadorBorrador);
+      this.temporizadorBorrador = null;
+    }
+
+    await this.guardarBorrador();
+    await this.router.navigate(['/incidencias']);
   }
 }

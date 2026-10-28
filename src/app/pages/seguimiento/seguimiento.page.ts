@@ -73,6 +73,7 @@ export class SeguimientoPage implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private alertController = inject(AlertController);
   private toastController = inject(ToastController);
+  private readonly registrosPorPagina = 5;
 
   codigoSeleccionado = '';
   codigosSeguimiento: string[] = [];
@@ -101,31 +102,68 @@ export class SeguimientoPage implements OnInit {
     }
   }
 
+  // Cargar todas las incidencias de MockAPI en lotes de 5.
+
   cargarIncidencias(): void {
     this.cargando = true;
     this.error = '';
     this.cdr.detectChanges();
 
-    // Carga hasta 100 registros de MockAPI.
-    this.incidenciasService.obtenerIncidencias(1, 100).subscribe({
-      next: (datos) => {
-        this.incidencias = datos;
-        this.cargando = false;
-        this.inicializando = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error al consultar incidencias:', err);
+    const incidenciasCargadas = new Map<string, Incidencia>();
 
-        this.error =
-          'No se pudieron cargar las incidencias. Comprueba tu conexión.';
+    const cargarPagina = (pagina: number): void => {
+      this.incidenciasService
+        .obtenerIncidencias(pagina, this.registrosPorPagina)
+        .subscribe({
+          next: (datos) => {
+            // Guardar las incidencias recibidas sin duplicarlas.
+            for (const incidencia of datos) {
+              incidenciasCargadas.set(
+                incidencia.codigo,
+                incidencia
+              );
+            }
 
-        this.cargando = false;
-        this.inicializando = false;
-        this.cdr.detectChanges();
-      },
-    });
+            // Si la respuesta tiene menos de 5 registros,
+            // hemos llegado al final.
+            if (datos.length < this.registrosPorPagina) {
+              this.incidencias = Array.from(
+                incidenciasCargadas.values()
+              );
+
+              this.cargando = false;
+              this.inicializando = false;
+              this.cdr.detectChanges();
+              return;
+            }
+
+            // Continuar con el siguiente lote de 5.
+            cargarPagina(pagina + 1);
+          },
+          error: (err) => {
+            console.error(
+              `Error al consultar la página ${pagina}:`,
+              err
+            );
+
+            // Conservar los resultados obtenidos antes del error.
+            this.incidencias = Array.from(
+              incidenciasCargadas.values()
+            );
+
+            this.error =
+              'No se pudieron cargar todas las incidencias. Comprueba tu conexión e inténtalo de nuevo.';
+
+            this.cargando = false;
+            this.inicializando = false;
+            this.cdr.detectChanges();
+          },
+        });
+    };
+
+    cargarPagina(1);
   }
+
 
   get incidenciasDisponibles(): Incidencia[] {
     return this.incidencias.filter(
@@ -256,6 +294,9 @@ export class SeguimientoPage implements OnInit {
       case 'resuelta':
         return 'estado-resuelta';
 
+      case 'en proceso':
+      case 'en proceso':
+        return 'estado-progreso';
       default:
         return '';
     }
