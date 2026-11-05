@@ -1,0 +1,139 @@
+
+.registro-content {
+  --background: #f3f6fb;
+}
+
+.registro-container {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+}
+
+.registro-logo {
+  text-align: center;
+  margin-bottom: 25px;
+
+  h1 {
+    color: #172b4d;
+    font-size: 27px;
+    font-weight: 800;
+    margin: 12px 0 5px;
+  }
+
+  p {
+    color: #718096;
+    font-size: 13px;
+    margin: 0;
+  }
+}
+
+.logo-icon {
+  width: 65px;
+  height: 65px;
+  border-radius: 18px;
+  background: #173b70;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.registro-card {
+  width: 100%;
+  max-width: 430px;
+  background: white;
+  padding: 28px 24px;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(20, 40, 80, 0.08);
+}
+
+.welcome {
+  margin-bottom: 22px;
+
+  h2 {
+    color: #172b4d;
+    font-size: 23px;
+    font-weight: 750;
+    margin: 0 0 7px;
+  }
+
+  p {
+    color: #718096;
+    font-size: 13px;
+    margin: 0;
+  }
+}
+
+.input-item {
+  --background: #f5f7fa;
+  --border-radius: 10px;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  margin-bottom: 13px;
+
+  ion-label {
+    color: #344563;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  ion-input {
+    --color: #172b4d;
+    --placeholder-color: #a0aec0;
+    font-size: 14px;
+  }
+}
+
+.registro-button {
+  --background: #173b70;
+  --background-hover: #214e8c;
+  --border-radius: 10px;
+  height: 48px;
+  margin-top: 12px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 22px;
+
+  p {
+    color: #718096;
+    font-size: 13px;
+  }
+
+  a {
+    color: #1d4e89;
+    font-weight: 700;
+    text-decoration: none;
+  }
+}
+
+.registro-footer {
+  text-align: center;
+  margin-top: 25px;
+
+  p {
+    color: #718096;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  span {
+    color: #a0aec0;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 380px) {
+  .registro-card {
+    padding: 23px 18px;
+  }
+}

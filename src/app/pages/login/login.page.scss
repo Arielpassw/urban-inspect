@@ -1,0 +1,137 @@
+.login-content {
+  --background: #f3f6fb;
+}
+
+.login-container {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 35px 22px;
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h1 {
+    color: #173b68;
+    font-size: 28px;
+    font-weight: 800;
+    margin: 14px 0 5px;
+  }
+
+  p {
+    color: #718096;
+    font-size: 13px;
+    margin: 0;
+  }
+}
+
+.logo-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  background: #173b68;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+
+  ion-text {
+    color: white;
+    font-size: 28px;
+    font-weight: 800;
+  }
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  background: white;
+  padding: 28px 22px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(25, 50, 80, 0.08);
+}
+
+.welcome {
+  margin-bottom: 25px;
+
+  h2 {
+    color: #1e293b;
+    font-size: 23px;
+    font-weight: 750;
+    margin: 0 0 8px;
+  }
+
+  p {
+    color: #8491a3;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.input-item {
+  --background: #f6f8fb;
+  --border-radius: 12px;
+  --padding-start: 14px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+
+  ion-label {
+    color: #40536b;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  ion-input {
+    --color: #26374b;
+    --placeholder-color: #9aa7b7;
+    font-size: 14px;
+  }
+}
+
+.login-button {
+  --background: #173b68;
+  --background-activated: #102c50;
+  --border-radius: 12px;
+  --box-shadow: none;
+  height: 49px;
+  margin-top: 12px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 25px;
+
+  p {
+    color: #718096;
+    font-size: 14px;
+  }
+
+  a {
+    color: #1765ad;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 3px;
+  }
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 30px;
+
+  p {
+    color: #718096;
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  span {
+    color: #a0aaba;
+    font-size: 11px;
+  }
+}

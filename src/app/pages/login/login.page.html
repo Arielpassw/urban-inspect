@@ -1,0 +1,79 @@
+<ion-content [fullscreen]="true" class="login-content">
+
+  <div class="login-container">
+
+    <div class="login-logo">
+      <div class="logo-icon">
+        <ion-text>UI</ion-text>
+      </div>
+
+      <h1>UrbanInspect</h1>
+      <p>Inspección de infraestructura urbana</p>
+    </div>
+
+    <div class="login-card">
+
+      <div class="welcome">
+        <h2>Bienvenido</h2>
+        <p>Ingresa tus credenciales para continuar.</p>
+      </div>
+
+      <form (ngSubmit)="iniciarSesion()">
+
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Correo electrónico</ion-label>
+          <ion-input
+            type="email"
+            name="email"
+            placeholder="ejemplo@correo.com"
+            [(ngModel)]="email"
+            autocomplete="email"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Contraseña</ion-label>
+          <ion-input
+            type="password"
+            name="password"
+            placeholder="Ingresa tu contraseña"
+            [(ngModel)]="password"
+            autocomplete="current-password"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          type="submit"
+          class="login-button"
+          [disabled]="cargando">
+
+          <ion-spinner
+            *ngIf="cargando"
+            name="crescent">
+          </ion-spinner>
+
+          <span *ngIf="!cargando">Iniciar sesión</span>
+        </ion-button>
+
+      </form>
+
+      <div class="register-link">
+        <p>
+          ¿No tienes una cuenta?
+          <a routerLink="/registro">Regístrate</a>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="login-footer">
+      <p>UrbanInspect © 2026</p>
+      <span>Gestión de incidencias urbanas</span>
+    </div>
+
+  </div>
+
+</ion-content>

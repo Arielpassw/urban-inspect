@@ -1,0 +1,105 @@
+
+<ion-content [fullscreen]="true" class="registro-content">
+
+  <div class="registro-container">
+
+    <div class="registro-logo">
+      <div class="logo-icon">
+        <span>UI</span>
+      </div>
+
+      <h1>UrbanInspect</h1>
+      <p>Inspección de infraestructura urbana</p>
+    </div>
+
+    <div class="registro-card">
+
+      <div class="welcome">
+        <h2>Crear cuenta</h2>
+        <p>Regístrate para comenzar a utilizar UrbanInspect.</p>
+      </div>
+
+      <form (ngSubmit)="registrarUsuario()">
+
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Nombre completo</ion-label>
+          <ion-input
+            type="text"
+            name="nombre"
+            placeholder="Ingresa tu nombre"
+            [(ngModel)]="nombre"
+            autocomplete="name"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Correo electrónico</ion-label>
+          <ion-input
+            type="email"
+            name="email"
+            placeholder="ejemplo@correo.com"
+            [(ngModel)]="email"
+            autocomplete="email"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Contraseña</ion-label>
+          <ion-input
+            type="password"
+            name="password"
+            placeholder="Mínimo 6 caracteres"
+            [(ngModel)]="password"
+            autocomplete="new-password"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item" lines="none">
+          <ion-label position="stacked">Confirmar contraseña</ion-label>
+          <ion-input
+            type="password"
+            name="confirmarPassword"
+            placeholder="Repite tu contraseña"
+            [(ngModel)]="confirmarPassword"
+            autocomplete="new-password"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          type="submit"
+          class="registro-button"
+          [disabled]="cargando">
+
+          <ion-spinner
+            *ngIf="cargando"
+            name="crescent">
+          </ion-spinner>
+
+          <span *ngIf="!cargando">Crear cuenta</span>
+
+        </ion-button>
+
+      </form>
+
+      <div class="login-link">
+        <p>
+          ¿Ya tienes una cuenta?
+          <a routerLink="/login">Inicia sesión</a>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="registro-footer">
+      <p>UrbanInspect © 2026</p>
+      <span>Gestión de incidencias urbanas</span>
+    </div>
+
+  </div>
+
+</ion-content>
